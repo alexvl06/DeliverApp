@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.deliverapp.classes;
+package classes;
 
 /**
  *
@@ -11,23 +11,33 @@ package com.mycompany.deliverapp.classes;
 public class Product extends ProductLine {
 
     private String id;
-    private String productName;
+    private String description;
+    private String brand;
     private String supplier;
 
-    public Product(String id, String productName, String supplier, Integer quantity, Double price) {
+    public Product(String id, String description, String supplier, Integer quantity, Double price, String brand) {
         this.id = id;
-        this.productName = productName;
+        this.description = description;
         this.supplier = supplier;
         this.quantity = quantity;
         this.price = price;
+        this.brand = brand;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getSupplier() {
