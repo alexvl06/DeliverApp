@@ -19,6 +19,7 @@ public class Request {
     private String status;
     private Send send;
 
+
     public Date getCreationDate() {
         return creationDate;
     }

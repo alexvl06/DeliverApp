@@ -52,7 +52,7 @@ public class ShoppingCart {
     }
 
     public void addRequest(String productName, Integer quantity) {
-        this.requestList.add(new Request(productName, quantity));
+        this.requestList.add(new Request(String.valueOf(this.requestList.size()+1),productName, quantity));
     }
 
     public Double getTotalDebt() {
@@ -119,7 +119,7 @@ public class ShoppingCart {
         }
     }
 
-    void addRequest(String productName, Integer quantity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    /*    void addRequest(String productName, Integer quantity) {
+    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }*/
 }

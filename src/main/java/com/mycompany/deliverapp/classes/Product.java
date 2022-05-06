@@ -8,16 +8,18 @@ package com.mycompany.deliverapp.classes;
  *
  * @author inter-telco
  */
-public class Product {
+public class Product extends ProductLine {
 
     private String id;
     private String productName;
     private String supplier;
 
-    public Product(String id, String productName, String supplier) {
+    public Product(String id, String productName, String supplier, Integer quantity, Double price) {
         this.id = id;
         this.productName = productName;
         this.supplier = supplier;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     public String getProductName() {

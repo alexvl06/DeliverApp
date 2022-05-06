@@ -11,12 +11,14 @@ import java.util.ArrayList;
  * @author inter-telco
  */
 public class Client {
-   private String id;
-   private String address;
-   private String phoneNumber;
-   private String email;
-   private ShoppingCart cart;
-   private Double money;
+   protected String id;
+   protected String address;
+   protected String phoneNumber;
+   protected String email;
+   protected ShoppingCart cart;
+   protected Double money;
+   
+
 
     public String getId() {
         return id;
@@ -82,13 +84,6 @@ public class Client {
         return this.cart.toPay(value, id);
     }
 
-    public Client(String id, String address, ShoppingCart cart, String phoneNumber, String email, Double money) {
-        this.id = id;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.cart = cart;
-        this.money = money;
-    }
+
     
 }
