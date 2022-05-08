@@ -13,11 +13,21 @@ import java.util.Date;
  * @author inter-telco
  */
 public class ShoppingCart {
-
+    private String id;
     private Date creationDate;
     private ArrayList<Request> requestList;
     private ArrayList<Product> productList;
     private Payment pay;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 
     public Date getCreationDate() {
         return creationDate;
@@ -51,8 +61,8 @@ public class ShoppingCart {
         this.productList = productList;
     }
 
-    public void addRequest(String productName, Integer quantity) {
-        this.requestList.add(new Request(String.valueOf(this.requestList.size()+1),productName, quantity));
+    public void addRequest(String description, Integer quantity, String brand) {
+        this.requestList.add(new Request(String.valueOf(this.requestList.size()+1),description, quantity, brand));
     }
 
     public Double getTotalDebt() {

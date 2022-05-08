@@ -13,7 +13,24 @@ import java.util.Date;
 public class Request {
     private String id;
     private Date creationDate;
-    private String productName;
+    private String description;
+    private String brand;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
     private Integer quantity;
     private Double value;
     private String status;
@@ -66,23 +83,17 @@ public class Request {
     
     
 
-    Request(String id, String productName, Integer quantity){
+    Request(String id, String description, Integer quantity, String brand){
         this.id = id;
-        this.productName = productName;
+        this.description = description;
         this.quantity = quantity;
         this.value = 0.0;
         this.status = "untested";
         this.creationDate = new Date();
+        this.brand = brand;
     }
 
     
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
 
     public Integer getQuantity() {
         return quantity;

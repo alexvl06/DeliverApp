@@ -13,8 +13,11 @@ import java.util.Locale;
  * @author inter-telco
  */
 public class Payment {
+
     private String id;
     private Date creationDate;
+    private String userId;
+    private Double value;
 
     public String getId() {
         return id;
@@ -31,8 +34,6 @@ public class Payment {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
-    private String userId;
-    private Double value;
 
     public String getUserId() {
         return userId;
@@ -56,11 +57,11 @@ public class Payment {
         this.userId = userId;
         this.value = value;
     }
-    
-    public String getBill(){
+
+    public String getBill() {
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
-        
-        return " Factura número: "+this.id+"\n Fecha de pago: "+this.creationDate+"\n Id de usuario: "+df.format(this.creationDate)+"\n Por concepto de: $"+this.value+" pesos.";
+
+        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + df.format(this.creationDate) + "\n Por concepto de: $" + this.value + " pesos.";
     }
-    
+
 }

@@ -68,8 +68,8 @@ public class Client {
         this.money = money;
     }
    
-    public void doRequest(String productName, Integer quantity){
-        cart.addRequest(productName, quantity);
+    public void doRequest(String productName, Integer quantity, String brand){
+        cart.addRequest(productName, quantity, brand);
     }
    
     public ArrayList<Product> getListProduct(){
