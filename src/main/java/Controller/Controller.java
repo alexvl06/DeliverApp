@@ -6,6 +6,8 @@ package Controller;
 
 import classes.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 import models.*;
@@ -125,7 +127,7 @@ public class Controller {
 
     public void updateProduct(int i, String br, String sup, String value, String quant, String desc) {
         if (i != -1) {
-         
+
             String index = Integer.toString(i + 1);
             Product product = new Product(index, desc, sup, Integer.parseInt(quant), Double.parseDouble(value), br);
 
@@ -135,8 +137,76 @@ public class Controller {
     }
 
     public boolean deletedProduct(int index) {
-        String newIndex = Integer.toString(index+1);
+        String newIndex = Integer.toString(index + 1);
         return ProductModel.deleteProduct(newIndex);
     }
 
+    public Product getProductData(int i) {
+        Product product = ProductModel.getOneProduct(Integer.toString(i + 1));
+        return product;
+    }
+
+    public DefaultListModel createRequestsList(int[] indexs) {
+        ArrayList<Integer> indexList = new ArrayList<>();
+        for (int i = 0; i < indexs.length; i++) {
+            indexList.add(indexs[i]);
+        }
+
+        DefaultListModel model;
+
+        if (RequestModel.getRequestList().isEmpty()) {
+            this.addRequest(indexList);
+            model = this.createRequestModel();
+
+        } else {
+            
+            boolean listAccepted = true;
+
+            for (int i = 0; i < indexs.length; i++) {
+
+                for (int j = 0; j < RequestModel.getRequestList().size(); j++) {
+                    if (RequestModel.getRequestList().get(j).getProductId().equals(Integer.toString(indexs[i] + 1))) {
+                        if (RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProductId()).getQuantity())) {
+                            listAccepted = false;
+                            break;
+                        } else {
+                            RequestModel.getRequestList().get(j).increaseQuantity();
+                            indexList.remove(new Integer(indexs[i]));
+
+                        }
+
+                    }
+
+                }
+
+            }
+            if(listAccepted){
+                this.addRequest(indexList);
+            }
+            
+            model = this.createRequestModel();
+
+        }
+        return model;
+    }
+
+    private DefaultListModel createRequestModel() {
+        DefaultListModel model = new DefaultListModel();
+
+        ArrayList<Request> request = RequestModel.getRequestList();
+        for (int i = 0; i < request.size(); i++) {
+            model.addElement(request.get(i).getDescription() + " " + request.get(i).getBrand() + " (" + request.get(i).getQuantity() + ")");
+
+        }
+        return model;
+
+    }
+
+    private void addRequest(ArrayList<Integer> indexs) {
+        for (int i = 0; i < indexs.size(); i++) {
+            Product product = ProductModel.getOneProduct(Integer.toString(indexs.get(i) + 1));
+            Request request = new Request(product.getId(), product.getDescription(), 1, product.getBrand());
+            RequestModel.createRequest(request);
+        }
+    }
 }

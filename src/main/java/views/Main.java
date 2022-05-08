@@ -6,6 +6,7 @@ package views;
 
 import Controller.Controller;
 import classes.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -67,9 +68,9 @@ public class Main extends javax.swing.JFrame {
         SelectedClient = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        requestList = new javax.swing.JList<>();
         jLabel8 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        addRequest = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         brand = new javax.swing.JTextField();
@@ -308,13 +309,23 @@ public class Main extends javax.swing.JFrame {
 
         jLabel7.setText("Carrito de compras");
 
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(requestList);
 
         jLabel8.setText("Lista de productos");
 
-        jButton5.setText("+");
+        addRequest.setText("+");
+        addRequest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addRequestActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("-");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("marca");
 
@@ -348,6 +359,11 @@ public class Main extends javax.swing.JFrame {
         jScrollPane3.setViewportView(productList);
 
         LoadProduct.setText("Cargar");
+        LoadProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadProductActionPerformed(evt);
+            }
+        });
 
         updateProduct.setText("Actualizar");
         updateProduct.addActionListener(new java.awt.event.ActionListener() {
@@ -398,25 +414,19 @@ public class Main extends javax.swing.JFrame {
                                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel18)
                                                     .addComponent(jLabel10))))
+                                        .addGap(18, 18, 18)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(supplier, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                                                    .addComponent(quantity)))
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(32, 32, 32)
-                                                .addComponent(jButton5))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton6)
-                                                .addGap(61, 61, 61))))
+                                            .addComponent(addRequest)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(supplier, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                                                .addComponent(quantity))
+                                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(SelectedClient)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(9, 9, 9))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addGap(279, 279, 279)
@@ -439,8 +449,8 @@ public class Main extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(SelectedClient))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -448,12 +458,12 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(jLabel7))
                         .addGap(8, 8, 8)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(addRequest)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton6)))
+                                .addComponent(jButton6))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)
                         .addComponent(jLabel12)
                         .addGap(9, 9, 9)
@@ -726,11 +736,11 @@ public class Main extends javax.swing.JFrame {
     private void DeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteClientActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        String index = Integer.toString(this.clientList.getSelectedIndex());
-        if (index.isEmpty()) {
+        String i = Integer.toString(this.clientList.getSelectedIndex());
+        if (i.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún cliente.");
         } else {
-            if (controller.deletedClient(index, (String) this.TypeClient.getSelectedItem())) {
+            if (controller.deletedClient(i, (String) this.TypeClient.getSelectedItem())) {
                 this.TypeClient.setSelectedItem(this.TypeClient.getSelectedItem());
                 JOptionPane.showMessageDialog(null, "Cliente eliminado con éxito");
             } else {
@@ -824,12 +834,12 @@ public class Main extends javax.swing.JFrame {
     private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int index = this.productList.getSelectedIndex();
-        if (index == -1) {
+        int i = this.productList.getSelectedIndex();
+        if (i == -1) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún producto.");
         } else {
-            if (controller.deletedProduct(index)) {
-                System.out.println("indice de producto: "+index);
+            if (controller.deletedProduct(i)) {
+                System.out.println("indice de producto: " + i);
                 this.productList.setModel(controller.createProductJlistModel());
                 JOptionPane.showMessageDialog(null, "Producto eliminado con éxito");
             } else {
@@ -839,6 +849,42 @@ public class Main extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_deleteProductActionPerformed
+
+    private void LoadProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadProductActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        int i = this.productList.getSelectedIndex();
+        if (i == -1) {
+            JOptionPane.showMessageDialog(null, "No hay elemento seleccionado");
+        } else {
+
+            Product product = controller.getProductData(i);
+            this.brand.setText(product.getBrand());
+            this.supplier.setText(product.getSupplier());
+            this.price.setText(Double.toString(product.getPrice()));
+            this.quantity.setText(Integer.toString(product.getQuantity()));
+            this.description.setText(product.getDescription());
+
+        }
+    }//GEN-LAST:event_LoadProductActionPerformed
+
+    private void addRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRequestActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        int[] indexs = this.productList.getSelectedIndices();
+        
+        DefaultListModel model = controller.createRequestsList(indexs);
+        this.requestList.setModel(model);
+    }//GEN-LAST:event_addRequestActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        int[] indexs = this.productList.getSelectedIndices();
+        
+        DefaultListModel model = controller.createRequestsList(indexs);
+        this.requestList.setModel(model);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -891,6 +937,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> TypeClient;
     private javax.swing.JButton UpdateClient;
     private javax.swing.JButton addProduct;
+    private javax.swing.JButton addRequest;
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
     private javax.swing.JList<String> clientList;
@@ -899,7 +946,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField email;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -923,7 +969,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -939,6 +984,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField price;
     private javax.swing.JList<String> productList;
     private javax.swing.JTextField quantity;
+    private javax.swing.JList<String> requestList;
     private javax.swing.JTextField supplier;
     private javax.swing.JButton updateProduct;
     // End of variables declaration//GEN-END:variables

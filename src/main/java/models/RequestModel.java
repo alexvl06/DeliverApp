@@ -13,18 +13,18 @@ import java.util.ArrayList;
  */
 public class RequestModel {
 
-    private static ArrayList<Request> requestList;
+    private static ArrayList<Request> requestList = new ArrayList<>();
 
-    public ArrayList<Request> getRequestList() {
+    public static ArrayList<Request> getRequestList() {
         return requestList;
     }
 
-    public void setRequestlList(ArrayList<Request> requestList) {
+    public static void setRequestList(ArrayList<Request> requestList) {
         RequestModel.requestList = requestList;
     }
 
     //CRUD
-    public Request getOneClient(String id) {
+    public static Request getOneRequest(String id) {
         try {
             for (int i = 0; i < RequestModel.requestList.size(); i++) {
                 if (RequestModel.requestList.get(i).getId().equals(id)) {
@@ -54,6 +54,7 @@ public class RequestModel {
     }
 
     public static void createRequest(Request request) {
+        request.setId(Integer.toString(RequestModel.getRequestList().size()+1));
         RequestModel.requestList.add(request);
     }
 

@@ -11,10 +11,24 @@ import java.util.Date;
  * @author inter-telco
  */
 public class Request {
+
     private String id;
+    private String productId;
     private Date creationDate;
     private String description;
     private String brand;
+    private Integer quantity;
+    private Double value;
+    private String status;
+    private Send send;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getDescription() {
         return description;
@@ -31,11 +45,6 @@ public class Request {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-    private Integer quantity;
-    private Double value;
-    private String status;
-    private Send send;
-
 
     public Date getCreationDate() {
         return creationDate;
@@ -53,8 +62,6 @@ public class Request {
         this.send = send;
     }
 
-    
-    
     public String getId() {
         return id;
     }
@@ -62,8 +69,6 @@ public class Request {
     public void setId(String id) {
         this.id = id;
     }
-    
-    
 
     public String getStatus() {
         return status;
@@ -80,11 +85,9 @@ public class Request {
     public void setValue(Double value) {
         this.value = value;
     }
-    
-    
 
-    Request(String id, String description, Integer quantity, String brand){
-        this.id = id;
+    public Request(String id, String description, Integer quantity, String brand) {
+        this.productId = id;
         this.description = description;
         this.quantity = quantity;
         this.value = 0.0;
@@ -93,8 +96,6 @@ public class Request {
         this.brand = brand;
     }
 
-    
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -102,6 +103,13 @@ public class Request {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-
-
+    
+    public void increaseQuantity(){      
+        int q = this.getQuantity();
+        this.setQuantity(++q);
+    }
+        public void descreaseQuantity(){      
+        int q = this.getQuantity();
+        this.setQuantity(--q);
+    }
 }

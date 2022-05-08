@@ -24,7 +24,7 @@ public class ProductModel {
     }
 
     //CRUD
-    public Product getOneClient(String id) {
+    public static Product getOneProduct(String id) {
         try {
             for (int i = 0; i < ProductModel.productList.size(); i++) {
                 if (ProductModel.productList.get(i).getId().equals(id)) {
