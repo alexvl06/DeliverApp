@@ -27,6 +27,8 @@ public class Natural extends Client {
         this.phoneNumber = phoneNumber;
     }
     
+    public Natural(){}
+    
     public String getFirstName() {
         return firstName;
     }

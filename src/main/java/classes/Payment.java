@@ -7,6 +7,7 @@ package classes;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  *
@@ -51,8 +52,10 @@ public class Payment {
         this.value = value;
     }
 
-    public Payment(String id, String userId, Double value) {
-        this.id = id;
+    public Payment(String userId, Double value) {
+       Random random = new Random();
+        
+        this.id = Integer.toString(random.nextInt(0+100));
         this.creationDate = new Date();
         this.userId = userId;
         this.value = value;

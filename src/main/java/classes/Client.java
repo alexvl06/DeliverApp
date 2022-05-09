@@ -72,9 +72,7 @@ public class Client {
         cart.addRequest(productName, quantity, brand);
     }
    
-    public ArrayList<Product> getListProduct(){
-     return this.cart.getProductList();
-    }
+
     
     public Double getTotalValueToPay(){
          return this.cart.getTotalDebt();

@@ -24,6 +24,10 @@ public class Legal extends Client {
         this.phoneNumber = phoneNumber;
     }
 
+    public Legal() {
+    }
+    
+
     public String getBusinessName() {
         return businessName;
     }
