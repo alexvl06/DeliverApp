@@ -8,8 +8,11 @@ import classes.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 import models.*;
 
 /**
@@ -146,7 +149,7 @@ public class Controller {
         return product;
     }
 
-    public DefaultListModel createRequestsList(int[] indexs) {
+    public DefaultListModel createRequestsList(int[] indexs, boolean decrementFlat) {
         ArrayList<Integer> indexList = new ArrayList<>();
         for (int i = 0; i < indexs.length; i++) {
             indexList.add(indexs[i]);
@@ -155,22 +158,35 @@ public class Controller {
         DefaultListModel model;
 
         if (RequestModel.getRequestList().isEmpty()) {
-            this.addRequest(indexList);
+
+            if (!decrementFlat) {
+                this.addRequest(indexList);
+            }
             model = this.createRequestModel();
 
         } else {
-            
+
             boolean listAccepted = true;
 
             for (int i = 0; i < indexs.length; i++) {
 
                 for (int j = 0; j < RequestModel.getRequestList().size(); j++) {
                     if (RequestModel.getRequestList().get(j).getProductId().equals(Integer.toString(indexs[i] + 1))) {
-                        if (RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProductId()).getQuantity())) {
+                        if ((!decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProductId()).getQuantity())) || (decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(1))) {
                             listAccepted = false;
+                            if (decrementFlat) {
+                                ArrayList<Integer> integerList = new ArrayList<>();
+                                integerList.add(indexs[i]);
+                                this.removeRequest(integerList);
+                            }
                             break;
                         } else {
-                            RequestModel.getRequestList().get(j).increaseQuantity();
+                            if (decrementFlat) {
+                                RequestModel.getRequestList().get(j).decreaseQuantity();
+                            } else {
+                                RequestModel.getRequestList().get(j).increaseQuantity();
+                            }
+
                             indexList.remove(new Integer(indexs[i]));
 
                         }
@@ -180,10 +196,10 @@ public class Controller {
                 }
 
             }
-            if(listAccepted){
+            if (listAccepted) {
                 this.addRequest(indexList);
             }
-            
+
             model = this.createRequestModel();
 
         }
@@ -208,5 +224,67 @@ public class Controller {
             Request request = new Request(product.getId(), product.getDescription(), 1, product.getBrand());
             RequestModel.createRequest(request);
         }
+    }
+
+    private void removeRequest(ArrayList<Integer> indexs) {
+        for (int i = 0; i < indexs.size(); i++) {
+            System.out.println("Indice de petición: " + indexs.get(i));
+            RequestModel.deleteRequest(Integer.toString(indexs.get(i) + 1));
+        }
+    }
+
+    public void linkResquestListToUserCart(Map<Integer, String> index) {
+        ArrayList<Integer> key = new ArrayList<>(index.keySet());
+        ArrayList<String> value = new ArrayList<>(index.values());
+        ShoppingCart cart = new ShoppingCart(ProductModel.getProductList());
+        cart.setRequestList(RequestModel.getRequestList());
+        if ("Jurídico".equals(value.get(0))) {
+            for (int i = 0; i < LegalModel.getLegalList().size(); i++) {
+                if (LegalModel.getLegalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    LegalModel.getLegalList().get(i).setCart(cart);
+                }
+            }
+
+        } else {
+            for (int i = 0; i < NaturalModel.getNaturalList().size(); i++) {
+                if (NaturalModel.getNaturalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    NaturalModel.getNaturalList().get(i).setCart(cart);
+                }
+            }
+
+        }
+
+    }
+
+    public DefaultTableModel createTableModelOfRequestData(Map<Integer, String> index) {
+        Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
+        ShoppingCart cart = new ShoppingCart(ProductModel.getProductList());
+        ArrayList<Integer> key = new ArrayList<>(index.keySet());
+        ArrayList<String> value = new ArrayList<>(index.values());
+        DefaultTableModel model = new DefaultTableModel(columnas, 0);
+        if ("Jurídico".equals(value.get(0))) {
+            for (int i = 0; i < LegalModel.getLegalList().size(); i++) {
+                if (LegalModel.getLegalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    cart = LegalModel.getLegalList().get(i).getCart();
+
+                }
+            }
+
+        } else {
+            for (int i = 0; i < NaturalModel.getNaturalList().size(); i++) {
+                if (NaturalModel.getNaturalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    cart = NaturalModel.getNaturalList().get(i).getCart();
+                }
+            }
+
+        }
+
+        ArrayList<Request> request = cart.getRequestList();
+
+        for (int j = 0; j < request.size(); j++) {
+            model.addRow(new Object[]{request.get(j).getId(), request.get(j).getBrand(), request.get(j).getDescription(), request.get(j).getQuantity(), request.get(j).getValue(), request.get(j).getValue() * request.get(j).getQuantity(), request.get(j).getCreationDate(), request.get(j).getStatus()});
+        }
+
+        return model;
     }
 }

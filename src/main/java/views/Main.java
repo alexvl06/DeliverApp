@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -84,7 +85,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         description = new javax.swing.JTextArea();
         addProduct = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        buyingBtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         productList = new javax.swing.JList<>();
         LoadProduct = new javax.swing.JButton();
@@ -94,7 +95,7 @@ public class Main extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Table = new javax.swing.JTable();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
@@ -354,7 +355,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton9.setText("Comprar");
+        buyingBtn.setText("Comprar");
+        buyingBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyingBtnActionPerformed(evt);
+            }
+        });
 
         jScrollPane3.setViewportView(productList);
 
@@ -416,11 +422,12 @@ public class Main extends javax.swing.JFrame {
                                                     .addComponent(jLabel10))))
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(addRequest)
                                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(supplier, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
                                                 .addComponent(quantity))
-                                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(addRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -439,10 +446,10 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(updateProduct)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(deleteProduct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(LoadProduct)
                 .addGap(18, 18, 18)
-                .addComponent(jButton9)
+                .addComponent(buyingBtn)
                 .addGap(46, 46, 46))
         );
         jPanel2Layout.setVerticalGroup(
@@ -486,7 +493,7 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addProduct)
-                    .addComponent(jButton9)
+                    .addComponent(buyingBtn)
                     .addComponent(LoadProduct)
                     .addComponent(updateProduct)
                     .addComponent(deleteProduct))
@@ -499,7 +506,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel21.setText("No seleccionado");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -518,7 +525,7 @@ public class Main extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane5.setViewportView(jTable1);
+        jScrollPane5.setViewportView(Table);
 
         jLabel22.setText("0$");
 
@@ -873,18 +880,35 @@ public class Main extends javax.swing.JFrame {
         Controller controller = new Controller();
         int[] indexs = this.productList.getSelectedIndices();
         
-        DefaultListModel model = controller.createRequestsList(indexs);
+        DefaultListModel model = controller.createRequestsList(indexs, false);
         this.requestList.setModel(model);
     }//GEN-LAST:event_addRequestActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int[] indexs = this.productList.getSelectedIndices();
-        
-        DefaultListModel model = controller.createRequestsList(indexs);
+        int[] indexs = this.requestList.getSelectedIndices();
+
+            DefaultListModel model = controller.createRequestsList(indexs, true);
         this.requestList.setModel(model);
+        
+        
+        
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void buyingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyingBtnActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        
+        if(this.index.isEmpty()){
+         JOptionPane.showMessageDialog(null, "Para solicitar la compra debes seleccionar un cliente.");
+        }else{
+            controller.linkResquestListToUserCart(this.index);
+            DefaultTableModel model = new DefaultTableModel();
+            model = controller.createTableModelOfRequestData(this.index);
+        }
+        //
+    }//GEN-LAST:event_buyingBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -934,12 +958,14 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField SecondLastName;
     private javax.swing.JLabel Second_id;
     private javax.swing.JLabel SelectedClient;
+    private javax.swing.JTable Table;
     private javax.swing.JComboBox<String> TypeClient;
     private javax.swing.JButton UpdateClient;
     private javax.swing.JButton addProduct;
     private javax.swing.JButton addRequest;
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
+    private javax.swing.JButton buyingBtn;
     private javax.swing.JList<String> clientList;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;
@@ -947,7 +973,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -977,7 +1002,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField money;
     private javax.swing.JTextField phone;

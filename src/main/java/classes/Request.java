@@ -108,7 +108,7 @@ public class Request {
         int q = this.getQuantity();
         this.setQuantity(++q);
     }
-        public void descreaseQuantity(){      
+        public void decreaseQuantity(){      
         int q = this.getQuantity();
         this.setQuantity(--q);
     }
