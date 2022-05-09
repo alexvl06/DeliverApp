@@ -6,9 +6,6 @@ package Controller;
 
 import classes.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
@@ -256,12 +253,10 @@ public class Controller {
 
     }
 
-    public DefaultTableModel createTableModelOfRequestData(Map<Integer, String> index) {
-        Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
-        ShoppingCart cart = new ShoppingCart(ProductModel.getProductList());
+    private ArrayList<Request> getRequestFromIndex(Map<Integer, String> index) {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());
         ArrayList<String> value = new ArrayList<>(index.values());
-        DefaultTableModel model = new DefaultTableModel(columnas, 0);
+        ShoppingCart cart = new ShoppingCart(ProductModel.getProductList());
         if ("Jurídico".equals(value.get(0))) {
             for (int i = 0; i < LegalModel.getLegalList().size(); i++) {
                 if (LegalModel.getLegalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
@@ -273,18 +268,67 @@ public class Controller {
         } else {
             for (int i = 0; i < NaturalModel.getNaturalList().size(); i++) {
                 if (NaturalModel.getNaturalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
-                    cart = NaturalModel.getNaturalList().get(i).getCart();
+                    cart = LegalModel.getLegalList().get(i).getCart();
                 }
             }
 
         }
 
         ArrayList<Request> request = cart.getRequestList();
+        return request;
+    }
 
+    public DefaultTableModel createTableModelOfRequestData(Map<Integer, String> index, String status) {
+        Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
+        DefaultTableModel model = new DefaultTableModel(columnas, 0);
+        ArrayList<Request> request = this.getRequestFromIndex(index);
         for (int j = 0; j < request.size(); j++) {
-            model.addRow(new Object[]{request.get(j).getId(), request.get(j).getBrand(), request.get(j).getDescription(), request.get(j).getQuantity(), request.get(j).getValue(), request.get(j).getValue() * request.get(j).getQuantity(), request.get(j).getCreationDate(), request.get(j).getStatus()});
+            model.addRow(new Object[]{request.get(j).getId(), request.get(j).getBrand(), request.get(j).getDescription(), request.get(j).getQuantity(), request.get(j).getValue(), request.get(j).getValue() * request.get(j).getQuantity(), request.get(j).getCreationDate(), status});
         }
 
         return model;
     }
+
+    public Double getTotalToPay(Map<Integer, String> index) {
+        ArrayList<Request> request = this.getRequestFromIndex(index);
+        Double result = 0.0;
+        for (int j = 0; j < request.size(); j++) {
+            result = result + request.get(j).getValue();
+        }
+        return result;
+    }
+
+    public void updateMoney(Map<Integer, String> index, Double money) {
+        ArrayList<Integer> key = new ArrayList<>(index.keySet());
+        ArrayList<String> value = new ArrayList<>(index.values());
+        Double result = 0.0;
+        if ("Jurídico".equals(value.get(0))) {
+            for (int i = 0; i < LegalModel.getLegalList().size(); i++) {
+                if (LegalModel.getLegalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    LegalModel.getLegalList().get(i).setMoney(money);
+
+                }
+            }
+
+        } else {
+            for (int i = 0; i < NaturalModel.getNaturalList().size(); i++) {
+                if (NaturalModel.getNaturalList().get(i).getId().equals(Integer.toString(1 + key.get(0)))) {
+                    NaturalModel.getNaturalList().get(i).setMoney(money);
+                }
+            }
+
+        }
+
+    }
+
+    public void updateProductList(Map<Integer, String> index) {
+        ArrayList<Request> request = this.getRequestFromIndex(index);
+        for (int j = 0; j < request.size(); j++) {
+            Integer quantity = ProductModel.getOneProduct(request.get(j).getProductId()).getQuantity()-request.get(j).getQuantity();
+            Product product = ProductModel.getOneProduct(request.get(j).getProductId());
+            product.setQuantity(quantity);
+        }
+
+    }
+
 }

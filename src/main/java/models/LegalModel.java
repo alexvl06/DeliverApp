@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class LegalModel {
 
-    private static ArrayList<Legal> legalList = new ArrayList<Legal>();
+    private static ArrayList<Legal> legalList = new ArrayList<>();
 
     public static ArrayList<Legal> getLegalList() {
         return legalList;

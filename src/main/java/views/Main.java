@@ -93,16 +93,16 @@ public class Main extends javax.swing.JFrame {
         deleteProduct = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        SelectedToPay = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         Table = new javax.swing.JTable();
-        jLabel22 = new javax.swing.JLabel();
+        clientMoney = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
-        jButton10 = new javax.swing.JButton();
+        payButton = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -504,7 +504,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel20.setText("Cliente:");
 
-        jLabel21.setText("No seleccionado");
+        SelectedToPay.setText("No seleccionado");
 
         Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -527,7 +527,7 @@ public class Main extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(Table);
 
-        jLabel22.setText("0$");
+        clientMoney.setText("0$");
 
         jLabel23.setText("Saldo");
 
@@ -543,7 +543,12 @@ public class Main extends javax.swing.JFrame {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "UPS", "FDX", "Deprisa", "TCC", "Servientrega", "InterRapidisimo", "Coordinadora", "4-72", "FedEx" }));
 
-        jButton10.setText("Pagar");
+        payButton.setText("Pagar");
+        payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt);
+            }
+        });
 
         jButton11.setText("Cancelar pedido");
 
@@ -558,11 +563,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel23)
                 .addGap(26, 26, 26)
-                .addComponent(jLabel22)
+                .addComponent(clientMoney)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel20)
                 .addGap(26, 26, 26)
-                .addComponent(jLabel21)
+                .addComponent(SelectedToPay)
                 .addGap(25, 25, 25))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
@@ -570,7 +575,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10))
+                    .addComponent(payButton))
                 .addGap(37, 37, 37)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -586,9 +591,9 @@ public class Main extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(jLabel21)
+                    .addComponent(SelectedToPay)
                     .addComponent(jLabel23)
-                    .addComponent(jLabel22))
+                    .addComponent(clientMoney))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
@@ -599,7 +604,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
+                    .addComponent(payButton)
                     .addComponent(jButton11))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
@@ -713,12 +718,14 @@ public class Main extends javax.swing.JFrame {
         } else {
             this.index.clear();
             this.SelectedClient.setText(this.clientList.getSelectedValue());
+            this.SelectedToPay.setText(this.clientList.getSelectedValue());
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
                 this.index.put(i, "Jurídico");
                 Legal client = controller.getLegalData(itemSelected);
                 this.phone.setText(client.getPhoneNumber());
                 this.email.setText(client.getEmail());
                 this.money.setText(Double.toString(client.getMoney()));
+                this.clientMoney.setText(Double.toString(client.getMoney()) + "$ pesos");
                 this.address.setText(client.getAddress());
                 this.FirstNameInput.setText(client.getBusinessName());
                 this.SecondFirstname.setText(" ");
@@ -879,7 +886,7 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
         int[] indexs = this.productList.getSelectedIndices();
-        
+
         DefaultListModel model = controller.createRequestsList(indexs, false);
         this.requestList.setModel(model);
     }//GEN-LAST:event_addRequestActionPerformed
@@ -889,26 +896,41 @@ public class Main extends javax.swing.JFrame {
         Controller controller = new Controller();
         int[] indexs = this.requestList.getSelectedIndices();
 
-            DefaultListModel model = controller.createRequestsList(indexs, true);
+        DefaultListModel model = controller.createRequestsList(indexs, true);
         this.requestList.setModel(model);
-        
-        
-        
+
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void buyingBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyingBtnActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        
-        if(this.index.isEmpty()){
-         JOptionPane.showMessageDialog(null, "Para solicitar la compra debes seleccionar un cliente.");
-        }else{
+
+        if (this.index.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Para solicitar la compra debes seleccionar un cliente.");
+        } else {
             controller.linkResquestListToUserCart(this.index);
-            DefaultTableModel model = new DefaultTableModel();
-            model = controller.createTableModelOfRequestData(this.index);
+            DefaultTableModel model = controller.createTableModelOfRequestData(this.index,"pendiente");
+            this.Table.setModel(model);
         }
         //
     }//GEN-LAST:event_buyingBtnActionPerformed
+
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        Double cltMoney = Double.parseDouble(this.clientMoney.getText());
+        Double totalToPay = controller.getTotalToPay(this.index);
+        if (cltMoney - totalToPay < 0) {
+            JOptionPane.showMessageDialog(rootPane, "No cuenta con suficiente dinero para efectuar el pago.");
+        } else {
+                controller.updateMoney(this.index, cltMoney - totalToPay);
+                this.clientMoney.setText(Double.toString(cltMoney) + "$ pesos");
+                DefaultTableModel model = controller.createTableModelOfRequestData(this.index, "pagado");
+                this.Table.setModel(model);
+                controller.updateProductList(this.index);
+        }
+    }//GEN-LAST:event_payButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -958,6 +980,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField SecondLastName;
     private javax.swing.JLabel Second_id;
     private javax.swing.JLabel SelectedClient;
+    private javax.swing.JLabel SelectedToPay;
     private javax.swing.JTable Table;
     private javax.swing.JComboBox<String> TypeClient;
     private javax.swing.JButton UpdateClient;
@@ -967,10 +990,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField brand;
     private javax.swing.JButton buyingBtn;
     private javax.swing.JList<String> clientList;
+    private javax.swing.JLabel clientMoney;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;
     private javax.swing.JTextField email;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -985,8 +1008,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
@@ -1004,6 +1025,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField money;
+    private javax.swing.JButton payButton;
     private javax.swing.JTextField phone;
     private javax.swing.JTextField price;
     private javax.swing.JList<String> productList;
