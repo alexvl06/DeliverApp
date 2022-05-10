@@ -4,6 +4,7 @@
  */
 package classes;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -46,8 +47,10 @@ public class Request {
         this.brand = brand;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public String getCreationDate() {
+        DateFormat dateShort = DateFormat.getDateInstance(DateFormat.SHORT);
+        DateFormat timeShort = DateFormat.getTimeInstance(DateFormat.SHORT);
+        return dateShort.format(this.creationDate)+" "+timeShort.format(this.creationDate);
     }
 
     public void setCreationDate(Date creationDate) {

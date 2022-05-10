@@ -62,7 +62,7 @@ public class Payment {
     public String getBill() {
         
 
-        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + this.getUserId() + "\n Por concepto de: $" + this.value + "$ pesos.";
+        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + this.getUserId() + "\n Por concepto de: $" + this.value + " pesos.";
     }
 
 }
