@@ -234,12 +234,13 @@ public class Controller {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());
         ArrayList<String> value = new ArrayList<>(index.values());
         ShoppingCart cart = new ShoppingCart();
+        this.setPricesToRequestList();
         cart.setRequestList(RequestModel.getRequestList());
         if ("Jurídico".equals(value.get(0))) {
-            LegalModel.getLegalList().get(1 + key.get(0)).setCart(cart);
+            LegalModel.getLegalList().get(key.get(0)).setCart(cart);
 
         } else {
-            NaturalModel.getNaturalList().get(1 + key.get(0)).setCart(cart);
+            NaturalModel.getNaturalList().get(key.get(0)).setCart(cart);
 
         }
 
@@ -250,10 +251,10 @@ public class Controller {
         ArrayList<String> value = new ArrayList<>(index.values());
         ArrayList<Request> request;
         if ("Jurídico".equals(value.get(0))) {
-            request = LegalModel.getLegalList().get(1 + key.get(0)).getCart().getRequestList();
+            request = LegalModel.getLegalList().get(key.get(0)).getCart().getRequestList();
 
         } else {
-            request = NaturalModel.getNaturalList().get(1 + key.get(0)).getCart().getRequestList();
+            request = NaturalModel.getNaturalList().get(key.get(0)).getCart().getRequestList();
 
         }
 
@@ -261,6 +262,7 @@ public class Controller {
     }
 
     public DefaultTableModel createTableModelOfRequestData(Map<Integer, String> index) {
+ 
         Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
         ArrayList<Request> request = this.getRequestFromIndex(index);
@@ -276,10 +278,10 @@ public class Controller {
         ArrayList<String> value = new ArrayList<>(index.values());
         Double total;
         if ("Jurídico".equals(value.get(0))) {
-            total = LegalModel.getLegalList().get(1 + key.get(0)).getTotalValueToPay();
+            total = LegalModel.getLegalList().get(key.get(0)).getTotalValueToPay();
 
         } else {
-            total = NaturalModel.getNaturalList().get(1 + key.get(0)).getTotalValueToPay();
+            total = NaturalModel.getNaturalList().get(key.get(0)).getTotalValueToPay();
 
         }
         return total;
@@ -290,10 +292,12 @@ public class Controller {
         ArrayList<String> value = new ArrayList<>(index.values());
 
         if ("Jurídico".equals(value.get(0))) {
-            LegalModel.getLegalList().get(1 + key.get(0)).setMoney(money);
+            LegalModel.getLegalList().get(key.get(0)).setMoney(money);
+            LegalModel.getLegalList().get(key.get(0)).toPay(this.getTotalToPay(index), Integer.toString(key.get(0)));
 
         } else {
-             NaturalModel.getNaturalList().get(1 + key.get(0)).setMoney(money);
+             NaturalModel.getNaturalList().get(key.get(0)).setMoney(money);
+             NaturalModel.getNaturalList().get(key.get(0)).toPay(this.getTotalToPay(index), Integer.toString(key.get(0)));
 
         }
        
@@ -317,14 +321,39 @@ public class Controller {
         ArrayList<String> value = new ArrayList<>(index.values());
         String bill;
         if ("Jurídico".equals(value.get(0))) {
-            bill = LegalModel.getLegalList().get(1 + key.get(0)).getCart().getPay().getBill();
+            bill = LegalModel.getLegalList().get(key.get(0)).getCart().getPay().getBill();
 
         } else {
-            bill = NaturalModel.getNaturalList().get(1 + key.get(0)).getCart().getPay().getBill();
+            bill = NaturalModel.getNaturalList().get(key.get(0)).getCart().getPay().getBill();
 
         }
         
         return bill;
     }
+    
+    private void setPricesToRequestList(){
+        Double price; 
+        for(int  i = 0; i<RequestModel.getRequestList().size(); i++){
+            price = ProductModel.getOneProduct(RequestModel.getRequestList().get(i).getProductId()).getPrice();
+            RequestModel.getRequestList().get(i).setValue(price);
+        }
+    }
 
+    public void deleteCart(Map<Integer, String> index) {
+ ArrayList<Integer> key = new ArrayList<>(index.keySet());
+        ArrayList<String> value = new ArrayList<>(index.values());
+        ArrayList<Request> requestList = new ArrayList<>();
+        ShoppingCart cart = new ShoppingCart();
+        if ("Jurídico".equals(value.get(0))) {
+            LegalModel.getLegalList().get(key.get(0)).setCart(cart);
+           
+
+        } else {
+             NaturalModel.getNaturalList().get(key.get(0)).setCart(cart);
+
+        }
+        
+        RequestModel.setRequestList(requestList);
+    
+    }
 }

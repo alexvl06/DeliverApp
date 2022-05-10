@@ -91,7 +91,7 @@ public class Request {
         this.description = description;
         this.quantity = quantity;
         this.value = 0.0;
-        this.status = "untested";
+        this.status = "Pendiente";
         this.creationDate = new Date();
         this.brand = brand;
     }

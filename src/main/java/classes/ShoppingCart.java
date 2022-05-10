@@ -58,7 +58,7 @@ public class ShoppingCart {
     public Double getTotalDebt() {
         Double debt = 0.0;
         for (int i = 0; i < this.requestList.size(); i++) {
-            debt = debt + this.requestList.get(i).getValue();
+            debt = debt + (this.requestList.get(i).getValue()*this.requestList.get(i).getQuantity());
         }
         return debt;
     }

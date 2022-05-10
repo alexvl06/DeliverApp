@@ -4,9 +4,7 @@
  */
 package classes;
 
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -62,9 +60,9 @@ public class Payment {
     }
 
     public String getBill() {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+        
 
-        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + df.format(this.creationDate) + "\n Por concepto de: $" + this.value + " pesos.";
+        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + this.getUserId() + "\n Por concepto de: $" + this.value + "$ pesos.";
     }
 
 }

@@ -103,7 +103,7 @@ public class Main extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         payButton = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
+        rebootCart = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -550,7 +550,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton11.setText("Cancelar pedido");
+        rebootCart.setText("Vaciar Carrito");
+        rebootCart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rebootCartActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -582,7 +587,7 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel25)
                         .addGap(25, 25, 25)
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton11))
+                    .addComponent(rebootCart))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -605,7 +610,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(payButton)
-                    .addComponent(jButton11))
+                    .addComponent(rebootCart))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -922,11 +927,12 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Olvidaste colocar el destino");
         } else {
             Controller controller = new Controller();
-            Double cltMoney = Double.parseDouble(this.clientMoney.getText());
+            Double cltMoney = Double.parseDouble(this.clientMoney.getText().substring(0, this.clientMoney.getText().length()-7));
             Double totalToPay = controller.getTotalToPay(this.index);
             if (cltMoney - totalToPay < 0) {
                 JOptionPane.showMessageDialog(rootPane, "No cuenta con suficiente dinero para efectuar el pago.");
             } else {
+               
                 controller.updateMoney(this.index, cltMoney - totalToPay);
                 this.clientMoney.setText(Double.toString(cltMoney - totalToPay) + "$ pesos");
                 DefaultTableModel model = controller.createTableModelOfRequestData(this.index);
@@ -937,6 +943,18 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_payButtonActionPerformed
+
+    private void rebootCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rebootCartActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        controller.deleteCart(this.index);
+        Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
+        DefaultTableModel model = new DefaultTableModel(columnas, 0);
+        DefaultListModel listModel = new DefaultListModel();
+        this.requestList.setModel(listModel);
+        this.Table.setModel(model);
+        
+    }//GEN-LAST:event_rebootCartActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1001,7 +1019,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextArea description;
     private javax.swing.JTextField destiny;
     private javax.swing.JTextField email;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
@@ -1036,6 +1053,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField price;
     private javax.swing.JList<String> productList;
     private javax.swing.JTextField quantity;
+    private javax.swing.JButton rebootCart;
     private javax.swing.JList<String> requestList;
     private javax.swing.JTextField supplier;
     private javax.swing.JButton updateProduct;
