@@ -51,14 +51,14 @@ public class ShoppingCart {
         this.requestList = requestList;
     }
 
-    public void addRequest(String description, Integer quantity, String brand) {
-        this.requestList.add(new Request(String.valueOf(this.requestList.size() + 1), description, quantity, brand));
+    public void addRequest(Integer quantity, Product product) {
+        this.requestList.add(new Request(product, quantity));
     }
 
     public Double getTotalDebt() {
         Double debt = 0.0;
         for (int i = 0; i < this.requestList.size(); i++) {
-            debt = debt + (this.requestList.get(i).getValue()*this.requestList.get(i).getQuantity());
+            debt = debt + (this.requestList.get(i).getProduct().getPrice()*this.requestList.get(i).getQuantity());
         }
         return debt;
     }

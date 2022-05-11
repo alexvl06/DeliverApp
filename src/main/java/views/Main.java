@@ -6,12 +6,10 @@ package views;
 
 import Controller.Controller;
 import classes.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**

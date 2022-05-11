@@ -37,7 +37,6 @@ public class Controller {
 
         }
 
-        System.out.println("Client list: " + model);
         return model;
 
     }
@@ -168,8 +167,8 @@ public class Controller {
             for (int i = 0; i < indexs.length; i++) {
 
                 for (int j = 0; j < RequestModel.getRequestList().size(); j++) {
-                    if (RequestModel.getRequestList().get(j).getProductId().equals(Integer.toString(indexs[i] + 1))) {
-                        if ((!decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProductId()).getQuantity())) || (decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(1))) {
+                    if (RequestModel.getRequestList().get(j).getProduct().getId().equals(Integer.toString(indexs[i] + 1))) {
+                        if ((!decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProduct().getId()).getQuantity())) || (decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(1))) {
                             listAccepted = false;
                             if (decrementFlat) {
                                 ArrayList<Integer> integerList = new ArrayList<>();
@@ -208,7 +207,8 @@ public class Controller {
 
         ArrayList<Request> request = RequestModel.getRequestList();
         for (int i = 0; i < request.size(); i++) {
-            model.addElement(request.get(i).getDescription() + " " + request.get(i).getBrand() + " (" + request.get(i).getQuantity() + ")");
+            Product product = ProductModel.getOneProduct(request.get(i).getProduct().getId());
+            model.addElement(product.getDescription() + " " + product.getBrand() + " (" + request.get(i).getQuantity() + ")");
 
         }
         return model;
@@ -218,7 +218,7 @@ public class Controller {
     private void addRequest(ArrayList<Integer> indexs) {
         for (int i = 0; i < indexs.size(); i++) {
             Product product = ProductModel.getOneProduct(Integer.toString(indexs.get(i) + 1));
-            Request request = new Request(product.getId(), product.getDescription(), 1, product.getBrand());
+            Request request = new Request(product, 1);
             RequestModel.createRequest(request);
         }
     }
@@ -234,7 +234,6 @@ public class Controller {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());
         ArrayList<String> value = new ArrayList<>(index.values());
         ShoppingCart cart = new ShoppingCart();
-        this.setPricesToRequestList();
         cart.setRequestList(RequestModel.getRequestList());
         if ("Jurídico".equals(value.get(0))) {
             LegalModel.getLegalList().get(key.get(0)).setCart(cart);
@@ -267,7 +266,8 @@ public class Controller {
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
         ArrayList<Request> request = this.getRequestFromIndex(index);
         for (int j = 0; j < request.size(); j++) {
-            model.addRow(new Object[]{request.get(j).getId(), request.get(j).getBrand(), request.get(j).getDescription(), request.get(j).getQuantity(), request.get(j).getValue(), request.get(j).getValue() * request.get(j).getQuantity(), request.get(j).getCreationDate(), request.get(j).getStatus()});
+            Product product = ProductModel.getOneProduct(request.get(j).getProduct().getId());
+            model.addRow(new Object[]{request.get(j).getId(), product.getBrand(), product.getDescription(), request.get(j).getQuantity(), product.getPrice(), product.getPrice() * request.get(j).getQuantity(), request.get(j).getCreationDate(), request.get(j).getStatus()});
         }
 
         return model;
@@ -306,11 +306,11 @@ public class Controller {
     public void updateProductList(Map<Integer, String> index) {
         ArrayList<Request> request = this.getRequestFromIndex(index);
         for (int j = 0; j < request.size(); j++) {
-            Integer quantity = ProductModel.getOneProduct(request.get(j).getProductId()).getQuantity() - request.get(j).getQuantity();
+            Integer quantity = ProductModel.getOneProduct(request.get(j).getProduct().getId()).getQuantity() - request.get(j).getQuantity();
             if (quantity == 0) {
-                ProductModel.deleteProduct(request.get(j).getProductId());
+                ProductModel.deleteProduct(request.get(j).getProduct().getId());
             } else {
-                Product product = ProductModel.getOneProduct(request.get(j).getProductId());
+                Product product = ProductModel.getOneProduct(request.get(j).getProduct().getId());
                 product.setQuantity(quantity);
                 ProductModel.updateProduct(product);
             }
@@ -335,13 +335,7 @@ public class Controller {
         return bill;
     }
 
-    private void setPricesToRequestList() {
-        Double price;
-        for (int i = 0; i < RequestModel.getRequestList().size(); i++) {
-            price = ProductModel.getOneProduct(RequestModel.getRequestList().get(i).getProductId()).getPrice();
-            RequestModel.getRequestList().get(i).setValue(price);
-        }
-    }
+
 
     public void deleteCart(Map<Integer, String> index) {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());

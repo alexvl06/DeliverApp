@@ -14,56 +14,30 @@ import java.util.Date;
 public class Request {
 
     private String id;
-    private String productId;
+    private Product product;
     private Date creationDate;
-    private String description;
-    private String brand;
     private Integer quantity;
-    private Double value;
     private String status;
-    private Send send;
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getCreationDate() {
         DateFormat dateShort = DateFormat.getDateInstance(DateFormat.SHORT);
         DateFormat timeShort = DateFormat.getTimeInstance(DateFormat.SHORT);
-        return dateShort.format(this.creationDate)+" "+timeShort.format(this.creationDate);
+        return dateShort.format(this.creationDate) + " " + timeShort.format(this.creationDate);
     }
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Send getSend() {
-        return send;
-    }
 
-    public void setSend(Send send) {
-        this.send = send;
-    }
 
     public String getId() {
         return id;
@@ -81,22 +55,11 @@ public class Request {
         this.status = status;
     }
 
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
-    public Request(String id, String description, Integer quantity, String brand) {
-        this.productId = id;
-        this.description = description;
+    public Request(Product product, Integer quantity) {
+        this.product = product;
         this.quantity = quantity;
-        this.value = 0.0;
         this.status = "Pendiente";
         this.creationDate = new Date();
-        this.brand = brand;
     }
 
     public Integer getQuantity() {
@@ -106,12 +69,13 @@ public class Request {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-    
-    public void increaseQuantity(){      
+
+    public void increaseQuantity() {
         int q = this.getQuantity();
         this.setQuantity(++q);
     }
-        public void decreaseQuantity(){      
+
+    public void decreaseQuantity() {
         int q = this.getQuantity();
         this.setQuantity(--q);
     }
