@@ -14,18 +14,11 @@ import java.util.Date;
  */
 public class ShoppingCart {
 
-    private String id;
+
     private Date creationDate;
     private ArrayList<Request> requestList;
     private Payment pay;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getCreationDate() {
         return creationDate;
