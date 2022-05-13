@@ -4,7 +4,6 @@
  */
 package classes;
 
-import java.util.ArrayList;
 
 /**
  *
@@ -67,12 +66,7 @@ public class Client {
     public void setMoney(Double money) {
         this.money = money;
     }
-   
-    public void doRequest(Product product, Integer quantity){
-        cart.addRequest(quantity, product);
-    }
-   
-
+    
     
     public Double getTotalValueToPay(){
          return this.cart.getTotalDebt();

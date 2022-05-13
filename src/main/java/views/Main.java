@@ -662,7 +662,7 @@ public class Main extends javax.swing.JFrame {
             this.SecondFirstname.setText(" ");
             this.SecondLastName.setEnabled(false);
             this.SecondLastName.setText(" ");
-            this.clientList.setModel(controller.createClientJlistModel("Jurídico"));
+            this.clientList.setModel(Controller.createClientJlistModel("Jurídico"));
 
         } else {
 
@@ -670,9 +670,10 @@ public class Main extends javax.swing.JFrame {
             this.Second_id.setText("Apellidos");
             this.SecondFirstname.setEnabled(true);
             this.SecondLastName.setEnabled(true);
-            this.clientList.setModel(controller.createClientJlistModel("Natural"));
+            this.clientList.setModel(Controller.createClientJlistModel("Natural"));
 
         }
+        this.productList.setModel(controller.createProductJlistModel());
     }//GEN-LAST:event_TypeClientActionPerformed
 
     private void destinyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destinyActionPerformed
@@ -990,7 +991,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        Controller.startArtificialDB();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -1021,7 +1022,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
     private javax.swing.JButton buyingBtn;
-    private javax.swing.JList<String> clientList;
+    private static javax.swing.JList<String> clientList;
     private javax.swing.JLabel clientMoney;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;

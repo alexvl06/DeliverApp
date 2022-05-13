@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class NaturalModel {
 
-    private static ArrayList<Natural> naturalList = new ArrayList<Natural>();
+    private static final ArrayList<Natural> naturalList = new ArrayList<>();
 
 
 
@@ -21,8 +21,9 @@ public class NaturalModel {
         return naturalList;
     }
 
-    public static void setNaturalList(ArrayList<Natural> naturalList) {
-        NaturalModel.naturalList = naturalList;
+    public static void defaultNaturalList() {
+        naturalList.add(new Natural("Alexis", "Rafael del Carmen", "Ávila", "Ortiz", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "alexisavila1991@gmail.com", "1", 1200.0, "3053478433"));
+        naturalList.add(new Natural("Yina", " Juliana", " Micanquer", " Caipe", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "yinajuliana03@gmail.com", "2", 1000.0, "3173856632"));
     }
 
     //CRUD

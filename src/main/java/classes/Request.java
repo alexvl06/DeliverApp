@@ -15,7 +15,7 @@ public class Request {
 
     private String id;
     private Product product;
-    private Date creationDate;
+    private final Date creationDate;
     private Integer quantity;
     private String status;
 
@@ -33,9 +33,6 @@ public class Request {
         return dateShort.format(this.creationDate) + " " + timeShort.format(this.creationDate);
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
 
 
 
@@ -66,17 +63,14 @@ public class Request {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 
     public void increaseQuantity() {
         int q = this.getQuantity();
-        this.setQuantity(++q);
+        this.quantity = ++q;
     }
 
     public void decreaseQuantity() {
         int q = this.getQuantity();
-        this.setQuantity(--q);
+        this.quantity = --q;
     }
 }

@@ -13,15 +13,20 @@ import java.util.ArrayList;
  */
 public class LegalModel {
 
-    private static ArrayList<Legal> legalList = new ArrayList<>();
+    private static final ArrayList<Legal> legalList = new ArrayList<>();
 
     public static ArrayList<Legal> getLegalList() {
         return legalList;
     }
-
-    public static void setLegalList(ArrayList<Legal> legalList) {
-        LegalModel.legalList = legalList;
+    
+    public static void defaultLegalList(){
+        legalList.add(new Legal("Inter-Telco S.A.S.", "900.382.516-1", "Edificio Prisma, Cra 35A N° 15B-35, Oficina 212, Medellín, Antioquia", "soporte@inter-telco.com", "1", 8500.0, "5200500"));
+        legalList.add(new Legal("SUMMA-sci S.A.S.", "901.033.369-2", "CALLE 51 SUR 48 57 MAYORCA ETAPA 3 TORRE NORTE PISO 12, MEDELLIN, ANTIOQUIA", "shappy@summa-sci.com", "2", 12500.0, "6046398"));
     }
+
+    private LegalModel() {
+    }
+
 
     //CRUD
     public static Legal getOneClient(String id) {

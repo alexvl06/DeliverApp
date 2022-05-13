@@ -24,20 +24,7 @@ public class RequestModel {
     }
 
     //CRUD
-    public static Request getOneRequest(String id) {
-        try {
-            for (int i = 0; i < RequestModel.requestList.size(); i++) {
-                if (RequestModel.requestList.get(i).getId().equals(id)) {
 
-                    return RequestModel.requestList.get(i);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Client not found: " + e);
-        }
-        return null;
-
-    }
 
     public static boolean deleteRequest(String id) {
         for (int i = 0; i < RequestModel.requestList.size(); i++) {
@@ -58,13 +45,5 @@ public class RequestModel {
         RequestModel.requestList.add(request);
     }
 
-    public static void updateRequest(Request request) {
-        for (int i = 0; i < RequestModel.requestList.size(); i++) {
-            if (RequestModel.requestList.get(i).getId().equals(request.getId())) {
-            } else {
-                RequestModel.requestList.set(i, request);
-            }
-        }
-    }
 
 }

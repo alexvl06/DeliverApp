@@ -13,43 +13,14 @@ import java.util.Random;
  */
 public class Payment {
 
-    private String id;
-    private Date creationDate;
-    private String userId;
-    private Double value;
+    private final String id;
+    private final Date creationDate;
+    private final String userId;
+    private final Double value;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
+ 
     public Payment(String userId, Double value) {
        Random random = new Random();
         
@@ -62,7 +33,7 @@ public class Payment {
     public String getBill() {
         
 
-        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + this.getUserId() + "\n Por concepto de: $" + this.value + " pesos.";
+        return " Factura número: " + this.id + "\n Fecha de pago: " + this.creationDate + "\n Id de usuario: " + this.userId + "\n Por concepto de: $" + this.value + " pesos.";
     }
 
 }

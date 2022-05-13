@@ -19,22 +19,15 @@ public class ShoppingCart {
     private ArrayList<Request> requestList;
     private Payment pay;
 
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setPay(Payment pay) {
+        this.pay = pay;
     }
 
     public Payment getPay() {
         return pay;
     }
 
-    public void setPay(Payment pay) {
-        this.pay = pay;
-    }
+
 
     public ArrayList<Request> getRequestList() {
         return requestList;

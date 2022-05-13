@@ -13,15 +13,20 @@ import java.util.ArrayList;
  */
 public class ProductModel {
 
-    private static ArrayList<Product> productList = new ArrayList<Product>();
+    private static final ArrayList<Product> productList = new ArrayList<>();
 
     public static ArrayList<Product> getProductList() {
         return productList;
     }
 
-    public static void setProductlList(ArrayList<Product> productList) {
-        ProductModel.productList = productList;
-    }
+  
+   public static void defaultProductList(){
+      productList.add(new Product("1", "pan tajado", "Pan pa' ya", 20, 4200.0, "Bimbo"));
+      productList.add(new Product("2", "cuchilla para afeitar", "Almacenes Éxito", 68,4900.0, "Gillete"));
+      productList.add(new Product("3", "Torta de las tres leches", "Punto caliente", 5, 18200.0, "Deli"));
+      productList.add(new Product("4", "pañuelos", "P&G", 45, 3200.0, "Familia"));
+      productList.add(new Product("5", "pasta ramen", "Oriental Food", 34, 1800.0, "Ajino-men"));
+   }
 
     //CRUD
     public static Product getOneProduct(String id) {

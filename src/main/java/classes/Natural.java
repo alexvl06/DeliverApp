@@ -14,13 +14,13 @@ public class Natural extends Client {
     private String firstLastName;
     private String secondLastName;
 
-    public Natural(String firstName, String secondName, String firstLastName, String secondLastName, String address, ShoppingCart cart, String email, String id, Double money, String phoneNumber) {
+    public Natural(String firstName, String secondName, String firstLastName, String secondLastName, String address, String email, String id, Double money, String phoneNumber) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.firstLastName = firstLastName;
         this.secondLastName = secondLastName;
         this.address = address;
-        this.cart = cart;
+        this.cart = new ShoppingCart();
         this.email = email;
         this.id = id;
         this.money = money;

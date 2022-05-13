@@ -17,9 +17,7 @@ public class ProductLine {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+
 
     public Integer getQuantity() {
         return quantity;
@@ -30,14 +28,4 @@ public class ProductLine {
     }
 
 
-
-    public Boolean reduceQuantity() {
-        if (this.quantity == 0) {
-            return false;
-        }
-
-        this.quantity--;
-        return true;
-
-    }
 }

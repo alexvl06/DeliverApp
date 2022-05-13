@@ -17,8 +17,14 @@ import models.*;
  * @author Alexis Avila
  */
 public class Controller {
+    
+    public static void startArtificialDB(){
+        LegalModel.defaultLegalList();
+        NaturalModel.defaultNaturalList();
+        ProductModel.defaultProductList();
+    } 
 
-    public DefaultListModel createClientJlistModel(String type) {
+    public static DefaultListModel createClientJlistModel(String type) {
         DefaultListModel model = new DefaultListModel();
         if ("Natural".equals(type)) {
 
@@ -42,26 +48,24 @@ public class Controller {
     }
 
     public void addClient(String businessName, String NIT, String adr, String mail, double parseDouble, String phoneNumber) {
-        ShoppingCart cart = new ShoppingCart();
         int id;
         if (LegalModel.getLegalList().isEmpty()) {
             id = 1;
         } else {
             id = LegalModel.getLegalList().size() + 1;
         }
-        Legal legal = new Legal(businessName, NIT, adr, cart, mail, Integer.toString(id), parseDouble, phoneNumber);
+        Legal legal = new Legal(businessName, NIT, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
         LegalModel.createLegal(legal);
     }
 
     public void addClient(String firstName, String secondName, String firstLastName, String secondLastName, String adr, String mail, double parseDouble, String phoneNumber) {
-        ShoppingCart cart = new ShoppingCart();
         int id;
         if (NaturalModel.getNaturalList().isEmpty()) {
             id = 1;
         } else {
             id = NaturalModel.getNaturalList().size() + 1;
         }
-        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, cart, mail, Integer.toString(id), parseDouble, phoneNumber);
+        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
         NaturalModel.createNatural(natural);
 
     }
@@ -88,16 +92,14 @@ public class Controller {
     }
 
     public void updateClient(String firstName, String firstLastName, String adr, String mail, String itemSelected, double parseDouble, String phoneNumber) {
-        ShoppingCart cart = new ShoppingCart();
         String index = Integer.toString(Integer.parseInt(itemSelected) + 1);
-        Legal legal = new Legal(firstName, firstLastName, adr, cart, mail, index, parseDouble, phoneNumber);
+        Legal legal = new Legal(firstName, firstLastName, adr, mail, index, parseDouble, phoneNumber);
         LegalModel.updateLegal(legal);
     }
 
     public void updateClient(String firstName, String secondName, String firstLastName, String secondLastName, String adr, String itemSelected, String mail, double parseDouble, String phoneNumber) {
-        ShoppingCart cart = new ShoppingCart();
         String index = Integer.toString(Integer.parseInt(itemSelected) + 1);
-        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, cart, mail, index, parseDouble, phoneNumber);
+        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, mail, index, parseDouble, phoneNumber);
         NaturalModel.updateNatural(natural);
     }
 
@@ -324,10 +326,15 @@ public class Controller {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());
         ArrayList<String> value = new ArrayList<>(index.values());
         String bill;
+
         if ("Jurídico".equals(value.get(0))) {
+            Payment pay = new Payment(value.get(0) + " " + key.get(0), LegalModel.getLegalList().get(key.get(0)).getTotalValueToPay());
+            LegalModel.getLegalList().get(key.get(0)).getCart().setPay(pay);
             bill = LegalModel.getLegalList().get(key.get(0)).getCart().getPay().getBill();
 
         } else {
+            Payment pay = new Payment(value.get(0) + " " + key.get(0), NaturalModel.getNaturalList().get(key.get(0)).getTotalValueToPay());
+            LegalModel.getLegalList().get(key.get(0)).getCart().setPay(pay);
             bill = NaturalModel.getNaturalList().get(key.get(0)).getCart().getPay().getBill();
 
         }
@@ -335,12 +342,10 @@ public class Controller {
         return bill;
     }
 
-
-
     public void deleteCart(Map<Integer, String> index) {
         ArrayList<Integer> key = new ArrayList<>(index.keySet());
         ArrayList<String> value = new ArrayList<>(index.values());
-        
+
         ShoppingCart cart = new ShoppingCart();
         if ("Jurídico".equals(value.get(0))) {
             LegalModel.getLegalList().get(key.get(0)).setCart(cart);
@@ -353,8 +358,8 @@ public class Controller {
         this.resetRequestList();
 
     }
-    
-    public void resetRequestList(){
+
+    public void resetRequestList() {
         ArrayList<Request> requestList = new ArrayList<>();
         RequestModel.setRequestList(requestList);
     }
