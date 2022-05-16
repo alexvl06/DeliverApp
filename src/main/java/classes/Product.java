@@ -14,6 +14,17 @@ public class Product extends ProductLine {
     private String description;
     private String brand;
     private String supplier;
+    private double price;
+
+
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+
+
+ 
 
     public Product(String id, String description, String supplier, Integer quantity, Double price, String brand) {
         this.id = id;
