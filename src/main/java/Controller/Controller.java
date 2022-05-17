@@ -58,14 +58,14 @@ public class Controller {
         LegalModel.createLegal(legal);
     }
 
-    public void addClient(String firstName, String secondName, String firstLastName, String secondLastName, String adr, String mail, double parseDouble, String phoneNumber) {
+    public void addClient(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String adr, String mail, double parseDouble, String phoneNumber) {
         int id;
         if (NaturalModel.getNaturalList().isEmpty()) {
             id = 1;
         } else {
             id = NaturalModel.getNaturalList().size() + 1;
         }
-        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
+        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
         NaturalModel.createNatural(natural);
 
     }
@@ -97,9 +97,9 @@ public class Controller {
         LegalModel.updateLegal(legal);
     }
 
-    public void updateClient(String firstName, String secondName, String firstLastName, String secondLastName, String adr, String itemSelected, String mail, double parseDouble, String phoneNumber) {
+    public void updateClient(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String adr, String itemSelected, String mail, double parseDouble, String phoneNumber) {
         String index = Integer.toString(Integer.parseInt(itemSelected) + 1);
-        Natural natural = new Natural(firstName, secondName, firstLastName, secondLastName, adr, mail, index, parseDouble, phoneNumber);
+        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, index, parseDouble, phoneNumber);
         NaturalModel.updateNatural(natural);
     }
 

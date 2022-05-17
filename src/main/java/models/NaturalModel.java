@@ -22,8 +22,8 @@ public class NaturalModel {
     }
 
     public static void defaultNaturalList() {
-        naturalList.add(new Natural("Alexis", "Rafael del Carmen", "Ávila", "Ortiz", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "alexisavila1991@gmail.com", "1", 1200.0, "3053478433"));
-        naturalList.add(new Natural("Yina", " Juliana", " Micanquer", " Caipe", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "yinajuliana03@gmail.com", "2", 1000.0, "3173856632"));
+        naturalList.add(new Natural("1083555169" ,"Alexis", "Rafael del Carmen", "Ávila", "Ortiz", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "alexisavila1991@gmail.com", "1", 1200.0, "3053478433"));
+        naturalList.add(new Natural("1017241138", "Yina", " Juliana", " Micanquer", " Caipe", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "yinajuliana03@gmail.com", "2", 1000.0, "3173856632"));
     }
 
     //CRUD

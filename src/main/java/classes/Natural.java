@@ -9,12 +9,24 @@ package classes;
  * @author Alexis Avila
  */
 public class Natural extends Client {
+    private String CC;
     private String firstName;
     private String secondName;
     private String firstLastName;
     private String secondLastName;
 
-    public Natural(String firstName, String secondName, String firstLastName, String secondLastName, String address, String email, String id, Double money, String phoneNumber) {
+    public String getCC() {
+        return CC;
+    }
+
+    public void setCC(String CC) {
+        this.CC = CC;
+    }
+    
+    
+
+    public Natural(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String address, String email, String id, Double money, String phoneNumber) {
+        this.CC = CC;
         this.firstName = firstName;
         this.secondName = secondName;
         this.firstLastName = firstLastName;

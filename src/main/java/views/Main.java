@@ -6,6 +6,7 @@ package views;
 
 import Controller.Controller;
 import classes.*;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -62,6 +63,8 @@ public class Main extends javax.swing.JFrame {
         UpdateClient = new javax.swing.JButton();
         DeleteClient = new javax.swing.JButton();
         LoadClient = new javax.swing.JButton();
+        CCLabel = new javax.swing.JLabel();
+        CC = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         SelectedClient = new javax.swing.JLabel();
@@ -118,6 +121,7 @@ public class Main extends javax.swing.JFrame {
 
         Name.setText("Nombres");
 
+        FirstNameInput.setText("*");
         FirstNameInput.setToolTipText("");
 
         Second_id.setText("Apellidos");
@@ -131,22 +135,32 @@ public class Main extends javax.swing.JFrame {
 
         SecondFirstname.setToolTipText("");
 
+        money.setText("*");
         money.setToolTipText("");
 
         jLabel5.setText("Saldo");
 
         jLabel11.setText("Dirección");
 
+        FirstLastNameInput.setText("*");
         FirstLastNameInput.setToolTipText("");
+        FirstLastNameInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FirstLastNameInputActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("Email");
 
+        email.setText("*");
         email.setToolTipText("");
 
         jLabel15.setText("Teléfono");
 
+        address.setText("*");
         address.setToolTipText("");
 
+        phone.setText("*");
         phone.setToolTipText("");
 
         jLabel17.setText("Lista: ");
@@ -181,6 +195,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        CCLabel.setText("C.C.");
+
+        CC.setForeground(new java.awt.Color(255, 255, 255));
+        CC.setText("*");
+        CC.setToolTipText("");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -195,17 +215,29 @@ public class Main extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(TypeClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel17)
-                                .addGap(10, 10, 10))
+                                .addComponent(jLabel17))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Name)
                                     .addComponent(Second_id))
-                                .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(FirstNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(FirstLastNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(FirstNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(FirstLastNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(SecondLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(SecondFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(CCLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CC))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -229,8 +261,6 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(SecondFirstname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(SecondLastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -247,8 +277,8 @@ public class Main extends javax.swing.JFrame {
                                 .addGap(12, 12, 12)
                                 .addComponent(DeleteClient)
                                 .addGap(18, 18, 18)
-                                .addComponent(LoadClient)))
-                        .addGap(178, 178, 178))))
+                                .addComponent(LoadClient)))))
+                .addGap(178, 178, 178))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,7 +298,9 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Name)
                     .addComponent(FirstNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SecondFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SecondFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CCLabel)
+                    .addComponent(CC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FirstLastNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,7 +324,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(UpdateClient)
                     .addComponent(DeleteClient)
                     .addComponent(LoadClient))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         Clientes.addTab("Clientes", jPanel1);
@@ -650,6 +682,9 @@ public class Main extends javax.swing.JFrame {
         this.SecondFirstname.setText("");
         this.FirstLastNameInput.setText("");
         this.SecondLastName.setText("");
+        this.CC.setEnabled(true);
+        Color color = new Color(0, 0, 0);
+        this.CCLabel.setForeground(color);
         this.clientList.removeAll();
         this.clientList.revalidate();
 
@@ -661,6 +696,9 @@ public class Main extends javax.swing.JFrame {
             this.SecondFirstname.setEnabled(false);
             this.SecondFirstname.setText(" ");
             this.SecondLastName.setEnabled(false);
+            this.CC.setEnabled(false);
+            color = new Color(242, 242, 242);
+            this.CCLabel.setForeground(color);
             this.SecondLastName.setText(" ");
             this.clientList.setModel(Controller.createClientJlistModel("Jurídico"));
 
@@ -697,9 +735,10 @@ public class Main extends javax.swing.JFrame {
         String secondName = this.SecondFirstname.getText();
         String firstLastName = this.FirstLastNameInput.getText();
         String secondLastName = this.SecondLastName.getText();
+        String cc = this.CC.getText();
 
-        if ("".equals(adr) || "".equals(phoneNumber) || "".equals(mail) || "".equals(coins) || "".equals(firstName) || "".equals(secondName) || "".equals(firstLastName) || "".equals(secondLastName)) {
-            JOptionPane.showMessageDialog(rootPane, "Todos lo campos son obligatorios.");
+        if ("".equals(cc) || "".equals(adr) || "".equals(phoneNumber) || "".equals(mail) || "".equals(coins) || "".equals(firstName) || "".equals(firstLastName)) {
+            JOptionPane.showMessageDialog(rootPane, "Los campos con * son obligatorios.");
         } else {
 
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
@@ -708,7 +747,7 @@ public class Main extends javax.swing.JFrame {
                 this.TypeClient.setSelectedIndex(1);
             } else {
 
-                controller.addClient(firstName, secondName, firstLastName, secondLastName, adr, mail, Double.parseDouble(coins), phoneNumber);
+                controller.addClient(cc, firstName, secondName, firstLastName, secondLastName, adr, mail, Double.parseDouble(coins), phoneNumber);
                 this.TypeClient.setSelectedIndex(0);
             }
 
@@ -788,9 +827,10 @@ public class Main extends javax.swing.JFrame {
         String firstLastName = this.FirstLastNameInput.getText();
         String secondLastName = this.SecondLastName.getText();
         String itemSelected = Integer.toString(this.clientList.getSelectedIndex());
+        String cc = this.CC.getText();
 
-        if ("".equals(adr) || "".equals(phoneNumber) || "".equals(mail) || "".equals(coins) || "".equals(firstName) || "".equals(secondName) || "".equals(firstLastName) || "".equals(secondLastName)) {
-            JOptionPane.showMessageDialog(rootPane, "Todos lo campos son obligatorios.");
+        if ("".equals(cc) || "".equals(adr) || "".equals(phoneNumber) || "".equals(mail) || "".equals(coins) || "".equals(firstName) || "".equals(firstLastName)) {
+            JOptionPane.showMessageDialog(rootPane, "Los campos con * son obligatorios.");
         } else {
 
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
@@ -799,7 +839,7 @@ public class Main extends javax.swing.JFrame {
                 this.TypeClient.setSelectedIndex(1);
             } else {
 
-                controller.updateClient(firstName, secondName, firstLastName, secondLastName, adr, itemSelected, mail, Double.parseDouble(coins), phoneNumber);
+                controller.updateClient(cc, firstName, secondName, firstLastName, secondLastName, adr, itemSelected, mail, Double.parseDouble(coins), phoneNumber);
                 this.TypeClient.setSelectedIndex(0);
             }
 
@@ -932,12 +972,12 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Olvidaste colocar el destino");
         } else {
             Controller controller = new Controller();
-            Double cltMoney = Double.parseDouble(this.clientMoney.getText().substring(0, this.clientMoney.getText().length()-7));
+            Double cltMoney = Double.parseDouble(this.clientMoney.getText().substring(0, this.clientMoney.getText().length() - 7));
             Double totalToPay = controller.getTotalToPay(this.index);
             if (cltMoney - totalToPay < 0) {
                 JOptionPane.showMessageDialog(rootPane, "No cuenta con suficiente dinero para efectuar el pago.");
             } else {
-               
+
                 controller.updateMoney(this.index, cltMoney - totalToPay);
                 this.clientMoney.setText(Double.toString(cltMoney - totalToPay) + "$ pesos");
                 DefaultTableModel model = controller.createTableModelOfRequestData(this.index);
@@ -947,7 +987,7 @@ public class Main extends javax.swing.JFrame {
                 this.requestList.setModel(listModel);
                 controller.updateProductList(this.index);
                 this.productList.setModel(controller.createProductJlistModel());
-                JOptionPane.showMessageDialog(rootPane, "Su compra fue: \n\n"+ controller.getBill(this.index));
+                JOptionPane.showMessageDialog(rootPane, "Su compra fue: \n\n" + controller.getBill(this.index));
             }
         }
 
@@ -962,8 +1002,12 @@ public class Main extends javax.swing.JFrame {
         DefaultListModel listModel = new DefaultListModel();
         this.requestList.setModel(listModel);
         this.Table.setModel(model);
-        
+
     }//GEN-LAST:event_rebootCartActionPerformed
+
+    private void FirstLastNameInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FirstLastNameInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FirstLastNameInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1001,6 +1045,8 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CC;
+    private javax.swing.JLabel CCLabel;
     private javax.swing.JTabbedPane Clientes;
     private javax.swing.JButton CreateClient;
     private javax.swing.JButton DeleteClient;
@@ -1022,7 +1068,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
     private javax.swing.JButton buyingBtn;
-    private static javax.swing.JList<String> clientList;
+    private javax.swing.JList<String> clientList;
     private javax.swing.JLabel clientMoney;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;
