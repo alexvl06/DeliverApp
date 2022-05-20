@@ -41,12 +41,12 @@ public class LegalModel {
             ResultSet rsLegal;
             ResultSet rsClient;
             try {
-                String query = "select * from Legals where id = ?";
+                String query = "select * from Legals where NIT = ?";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, id);
                 rsLegal = ps.executeQuery();
                 ps.close();
-                query = "select * from Clients where id = ?";
+                query = "select * from Clients where idClient = ?";
                 ps = connection.prepareStatement(query);
                 ps.setString(1, rsLegal.getString("idClient"));
                 rsClient = ps.executeQuery();
@@ -77,7 +77,7 @@ public class LegalModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "delete from Legals where message_id = ?";
+                String query = "delete from Legals where NIT = ?";
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, id);
                 ps.executeUpdate();
@@ -112,7 +112,7 @@ public class LegalModel {
                     ResultSet generatedKeys = ps.getGeneratedKeys();
                     if(generatedKeys.next()){
                         int idClient = generatedKeys.getInt(1);
-                        query = "insert into Legals (NIT, business name, idClient) values (?, ?, ?)";
+                        query = "insert into Legals (NIT, `business name`, idClient) values (?, ?, ?)";
                         ps = conexion.prepareStatement(query);
                         ps.setString(1, legal.getNIT());
                         ps.setString(2, legal.getBusinessName());
@@ -135,6 +135,32 @@ public class LegalModel {
     }
 
     public static void updateLegal(Legal legal) {
+        
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "update Clients set address = ?, phoneNumber = ?, email = ?, money = ?  where idClient = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, legal.getAddress());
+                ps.setString(2, legal.getPhoneNumber());
+                ps.setString(3, legal.getEmail());
+                ps.setDouble(4, legal.getMoney());
+                ps.setInt(5, Integer.parseInt(legal.getId()));
+                ps.executeUpdate();
+                query = "update Legals set `business name` = ? where NIT = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, legal.getBusinessName());
+                ps.setString(1, legal.getNIT());
+                ps.close();
+                System.out.println("¡Legal client was updated successfully!");
+            } catch (SQLException e) {
+                System.out.println("Legal client not was updated due to a fatal error has occurred");
+                System.out.println(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
         for (int i = 0; i < LegalModel.legalList.size(); i++) {
             if (LegalModel.legalList.get(i).getId().equals(legal.getId())) {
 
