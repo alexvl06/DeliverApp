@@ -25,14 +25,13 @@ public class Natural extends Client {
     
     
 
-    public Natural(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String address, String email, String id, Double money, String phoneNumber) {
+    public Natural(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String address, String email, int id, Double money, String phoneNumber) {
         this.CC = CC;
         this.firstName = firstName;
         this.secondName = secondName;
         this.firstLastName = firstLastName;
         this.secondLastName = secondLastName;
         this.address = address;
-        this.cart = new ShoppingCart();
         this.email = email;
         this.id = id;
         this.money = money;

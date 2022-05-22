@@ -4,26 +4,37 @@
  */
 package classes;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 
 /**
  *
  * @author inter-telco
  */
 public class Client {
-   protected String id;
+   protected int id;
    protected String address;
    protected String phoneNumber;
    protected String email;
-   protected ShoppingCart cart;
    protected Double money;
+   protected ArrayList<Request> requestList;
+
+    public ArrayList<Request> getRequestList() {
+        return requestList;
+    }
+
+    public void setRequestList(ArrayList<Request> requestList) {
+        this.requestList = requestList;
+    }
    
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,13 +62,7 @@ public class Client {
         this.email = email;
     }
 
-    public ShoppingCart getCart() {
-        return cart;
-    }
 
-    public void setCart(ShoppingCart cart) {
-        this.cart = cart;
-    }
 
     public Double getMoney() {
         return money;
@@ -68,14 +73,28 @@ public class Client {
     }
     
     
-    public Double getTotalValueToPay(){
-         return this.cart.getTotalDebt();
-    } 
-    
-    public Boolean toPay(Double value, String id){
-        return this.cart.toPay(value, id);
+
+    public Payment toPay(Double value, int id) {
+        Double debt = this.getTotalValueToPay();
+        if (Objects.equals(value, debt)) {
+            Payment pay = new Payment(id, value);
+            for (int i = 0; i < this.requestList.size(); i++) {
+                this.requestList.get(i).setStatus("Pagado");
+            }
+            return pay;
+        } else {
+
+            return null;
+        }
+        
+
     }
-
-
+        public Double getTotalValueToPay() {
+        Double debt = 0.0;
+        for (int i = 0; i < this.requestList.size(); i++) {
+            debt = debt + (this.requestList.get(i).getProduct().getPrice()*this.requestList.get(i).getQuantity());
+        }
+        return debt;
+    }
     
 }

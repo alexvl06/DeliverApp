@@ -13,11 +13,10 @@ public class Legal extends Client {
     private String businessName;
     private String NIT;
 
-    public Legal(String businessName, String NIT, String address, String email, String id, Double money, String phoneNumber) {
+    public Legal(String businessName, String NIT, String address, String email, int id, Double money, String phoneNumber) {
         this.businessName = businessName;
         this.NIT = NIT;
         this.address = address;
-        this.cart = new ShoppingCart();
         this.email = email;
         this.id = id;
         this.money = money;

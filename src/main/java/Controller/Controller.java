@@ -6,7 +6,6 @@ package Controller;
 
 import classes.*;
 import java.util.ArrayList;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
@@ -17,27 +16,33 @@ import models.*;
  * @author Alexis Avila
  */
 public class Controller {
-    
-    public static void startArtificialDB(){
-        LegalModel.defaultLegalList();
-        NaturalModel.defaultNaturalList();
-        ProductModel.defaultProductList();
-    } 
+
+    public static ArrayList<Legal> legalList = new ArrayList<>();
+    public static ArrayList<Natural> naturalList = new ArrayList<>();
+    public static ArrayList<Product> productList = new ArrayList<>();
+    public static ArrayList<Request> requestList = new ArrayList<>();
+
+    public static void startTemporalDB() {
+        Controller.legalList = LegalModel.getLegalList();
+        Controller.naturalList = NaturalModel.getNaturalList();
+        Controller.productList = ProductModel.getProductList();
+        Controller.requestList = RequestModel.getRequestList();
+    }
 
     public static DefaultListModel createClientJlistModel(String type) {
         DefaultListModel model = new DefaultListModel();
         if ("Natural".equals(type)) {
 
-            ArrayList<Natural> natural = NaturalModel.getNaturalList();
-            for (int i = 0; i < natural.size(); i++) {
-                model.addElement(natural.get(i).getFirstName() + " " + natural.get(i).getSecondName() + " " + natural.get(i).getFirstLastName() + " " + natural.get(i).getSecondLastName());
+            Controller.naturalList= NaturalModel.getNaturalList();
+            for (int i = 0; i < Controller.naturalList.size(); i++) {
+                model.addElement(Controller.naturalList.get(i).getId() + ". " + Controller.naturalList.get(i).getFirstName() + " " + Controller.naturalList.get(i).getSecondName() + " " + Controller.naturalList.get(i).getFirstLastName() + " " + Controller.naturalList.get(i).getSecondLastName());
 
             }
 
         } else {
-            ArrayList<Legal> legal = LegalModel.getLegalList();
-            for (int i = 0; i < legal.size(); i++) {
-                model.addElement(legal.get(i).getBusinessName());
+            Controller.legalList = LegalModel.getLegalList();
+            for (int i = 0; i < Controller.legalList.size(); i++) {
+                model.addElement(Controller.legalList.get(i).getId() + ". " + Controller.legalList.get(i).getBusinessName());
 
             }
 
@@ -48,106 +53,83 @@ public class Controller {
     }
 
     public void addClient(String businessName, String NIT, String adr, String mail, double parseDouble, String phoneNumber) {
-        int id;
-        if (LegalModel.getLegalList().isEmpty()) {
-            id = 1;
-        } else {
-            id = LegalModel.getLegalList().size() + 1;
-        }
-        Legal legal = new Legal(businessName, NIT, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
+
+        Legal legal = new Legal(businessName, NIT, adr, mail, 0, parseDouble, phoneNumber);
         LegalModel.createLegal(legal);
     }
 
     public void addClient(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String adr, String mail, double parseDouble, String phoneNumber) {
-        int id;
-        if (NaturalModel.getNaturalList().isEmpty()) {
-            id = 1;
-        } else {
-            id = NaturalModel.getNaturalList().size() + 1;
-        }
-        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, Integer.toString(id), parseDouble, phoneNumber);
+
+        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, 0, parseDouble, phoneNumber);
         NaturalModel.createNatural(natural);
 
     }
 
-    public Legal getLegalData(String itemSelected) {
+    public Legal getLegalData(int itemSelected) {
 
-        Legal legal = LegalModel.getOneClient(Integer.toString(Integer.parseInt(itemSelected) + 1));
+        Legal legal = LegalModel.getOneClient(itemSelected);
         return legal;
 
     }
 
-    public Natural getNaturalData(String itemSelected) {
-        Natural natural = NaturalModel.getOneClient(Integer.toString(Integer.parseInt(itemSelected) + 1));
+    public Natural getNaturalData(int itemSelected) {
+        Natural natural = NaturalModel.getOneClient(itemSelected);
         return natural;
     }
 
-    public boolean deletedClient(String index, String selectedItem) {
-        String newIndex = Integer.toString(Integer.parseInt(index) + 1);
-        if (selectedItem.equals("Jurídico")) {
-            return LegalModel.deleteLegal(newIndex);
-        } else {
-            return NaturalModel.deleteNatural(newIndex);
-        }
+    public boolean deletedClient(int id) {
+        return ClientModel.deleteClient(id);
     }
 
-    public void updateClient(String firstName, String firstLastName, String adr, String mail, String itemSelected, double parseDouble, String phoneNumber) {
-        String index = Integer.toString(Integer.parseInt(itemSelected) + 1);
-        Legal legal = new Legal(firstName, firstLastName, adr, mail, index, parseDouble, phoneNumber);
+    public void updateClient(String businessName, String NIT, String adr, String mail, int itemSelected, double parseDouble, String phoneNumber) {
+        
+        Legal legal = new Legal(businessName, NIT, adr, mail, itemSelected, parseDouble, phoneNumber);
         LegalModel.updateLegal(legal);
     }
 
-    public void updateClient(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String adr, String itemSelected, String mail, double parseDouble, String phoneNumber) {
-        String index = Integer.toString(Integer.parseInt(itemSelected) + 1);
-        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, index, parseDouble, phoneNumber);
+    public void updateClient(String CC, String firstName, String secondName, String firstLastName, String secondLastName, String adr, int itemSelected, String mail, double parseDouble, String phoneNumber) {
+
+        Natural natural = new Natural(CC, firstName, secondName, firstLastName, secondLastName, adr, mail, itemSelected, parseDouble, phoneNumber);
         NaturalModel.updateNatural(natural);
     }
 
     public void addProduct(String br, String sup, String value, String quant, String desc) {
-        int id;
-        if (ProductModel.getProductList().isEmpty()) {
-            id = 1;
-        } else {
-            id = ProductModel.getProductList().size() + 1;
-        }
-        Product product = new Product(Integer.toString(id), desc, sup, Integer.parseInt(quant), Double.parseDouble(value), br);
+
+        Product product = new Product(desc, sup, Integer.parseInt(quant), Double.parseDouble(value), br);
 
         ProductModel.createProduct(product);
     }
 
     public ListModel<String> createProductJlistModel() {
 
-        ArrayList<Product> product = ProductModel.getProductList();
+        Controller.productList = ProductModel.getProductList();
         DefaultListModel model = new DefaultListModel();
-        for (int i = 0; i < product.size(); i++) {
-            model.addElement(product.get(i).getDescription() + " " + product.get(i).getBrand() + " a " + product.get(i).getPrice() + "$ pesos (" + product.get(i).getQuantity() + ")");
+        for (int i = 0; i < Controller.productList.size(); i++) {
+            model.addElement(Controller.productList.get(i).getId() + ". " + Controller.productList.get(i).getDescription() + " " + Controller.productList.get(i).getBrand() + " a " + Controller.productList.get(i).getPrice() + "$ pesos (" + Controller.productList.get(i).getQuantity() + ")");
 
         }
         return model;
     }
 
-    public void updateProduct(int i, String br, String sup, String value, String quant, String desc) {
-        if (i != -1) {
+    public void updateProduct(int code, String br, String sup, String value, String quant, String desc) {
 
-            String index = Integer.toString(i + 1);
-            Product product = new Product(index, desc, sup, Integer.parseInt(quant), Double.parseDouble(value), br);
+        Product product = new Product(desc, sup, Integer.parseInt(quant), Double.parseDouble(value), br);
 
-            ProductModel.updateProduct(product);
-        }
+        ProductModel.updateProduct(product);
 
     }
 
     public boolean deletedProduct(int index) {
-        String newIndex = Integer.toString(index + 1);
-        return ProductModel.deleteProduct(newIndex);
+        return ProductModel.deleteProduct(index);
     }
 
     public Product getProductData(int i) {
-        Product product = ProductModel.getOneProduct(Integer.toString(i + 1));
+        Product product = ProductModel.getOneProduct(i);
         return product;
     }
 
-    public DefaultListModel createRequestsList(int[] indexs, boolean decrementFlat) {
+    public DefaultListModel createRequestsList(int[] indexs, int idClient, boolean decrementFlat) {
+        Controller.requestList = RequestModel.getRequestListByClientId(idClient);
         ArrayList<Integer> indexList = new ArrayList<>();
         for (int i = 0; i < indexs.length; i++) {
             indexList.add(indexs[i]);
@@ -158,9 +140,9 @@ public class Controller {
         if (RequestModel.getRequestList().isEmpty()) {
 
             if (!decrementFlat) {
-                this.addRequest(indexList);
+                this.addRequest(indexList, idClient);
             }
-            model = this.createRequestModel();
+            model = this.createRequestModel(idClient);
 
         } else {
 
@@ -168,22 +150,26 @@ public class Controller {
 
             for (int i = 0; i < indexs.length; i++) {
 
-                for (int j = 0; j < RequestModel.getRequestList().size(); j++) {
-                    if (RequestModel.getRequestList().get(j).getProduct().getId().equals(Integer.toString(indexs[i] + 1))) {
-                        if ((!decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(ProductModel.getOneProduct(RequestModel.getRequestList().get(j).getProduct().getId()).getQuantity())) || (decrementFlat && RequestModel.getRequestList().get(j).getQuantity().equals(1))) {
+                for (int j = 0; j < Controller.requestList.size(); j++) {
+                    if (Controller.requestList.get(j).getProduct().getId() == indexs[i]) {
+                        if ((!decrementFlat && Controller.requestList.get(j).getQuantity().equals(ProductModel.getOneProduct(Controller.requestList.get(j).getProduct().getId()).getQuantity())) || (decrementFlat && Controller.requestList.get(j).getQuantity().equals(1))) {
                             listAccepted = false;
                             if (decrementFlat) {
                                 ArrayList<Integer> integerList = new ArrayList<>();
                                 integerList.add(indexs[i]);
                                 this.removeRequest(integerList);
+
                             }
                             break;
                         } else {
                             if (decrementFlat) {
-                                RequestModel.getRequestList().get(j).decreaseQuantity();
+                                Controller.requestList.get(j).decreaseQuantity();
+
                             } else {
-                                RequestModel.getRequestList().get(j).increaseQuantity();
+                                Controller.requestList.get(j).increaseQuantity();
+
                             }
+                            RequestModel.updateRequest(Controller.requestList.get(j));
 
                             indexList.remove(new Integer(indexs[i]));
 
@@ -195,32 +181,32 @@ public class Controller {
 
             }
             if (listAccepted) {
-                this.addRequest(indexList);
+                this.addRequest(indexList, idClient);
             }
 
-            model = this.createRequestModel();
+            model = this.createRequestModel(idClient);
 
         }
         return model;
     }
 
-    private DefaultListModel createRequestModel() {
+    private DefaultListModel createRequestModel(int id) {
         DefaultListModel model = new DefaultListModel();
 
-        ArrayList<Request> request = RequestModel.getRequestList();
-        for (int i = 0; i < request.size(); i++) {
-            Product product = ProductModel.getOneProduct(request.get(i).getProduct().getId());
-            model.addElement(product.getDescription() + " " + product.getBrand() + " (" + request.get(i).getQuantity() + ")");
+        Controller.requestList = RequestModel.getRequestListByClientId(id);
+        for (int i = 0; i < Controller.requestList.size(); i++) {
+            Product product = ProductModel.getOneProduct(Controller.requestList.get(i).getProduct().getId());
+            model.addElement(Controller.requestList.get(i).getId() + ". " + product.getDescription() + " " + product.getBrand() + " (" + Controller.requestList.get(i).getQuantity() + ")");
 
         }
         return model;
 
     }
 
-    private void addRequest(ArrayList<Integer> indexs) {
+    private void addRequest(ArrayList<Integer> indexs, int idClient) {
         for (int i = 0; i < indexs.size(); i++) {
-            Product product = ProductModel.getOneProduct(Integer.toString(indexs.get(i) + 1));
-            Request request = new Request(product, 1);
+            Product product = ProductModel.getOneProduct(indexs.get(i));
+            Request request = new Request(product, 1, idClient);
             RequestModel.createRequest(request);
         }
     }
@@ -228,91 +214,56 @@ public class Controller {
     private void removeRequest(ArrayList<Integer> indexs) {
         for (int i = 0; i < indexs.size(); i++) {
 
-            RequestModel.deleteRequest(Integer.toString(indexs.get(i) + 1));
+            RequestModel.deleteRequest(indexs.get(i));
         }
     }
 
-    public void linkResquestListToUserCart(Map<Integer, String> index) {
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
-        ShoppingCart cart = new ShoppingCart();
-        cart.setRequestList(RequestModel.getRequestList());
-        if ("Jurídico".equals(value.get(0))) {
-            LegalModel.getLegalList().get(key.get(0)).setCart(cart);
-
-        } else {
-            NaturalModel.getNaturalList().get(key.get(0)).setCart(cart);
-
-        }
-
-    }
-
-    private ArrayList<Request> getRequestFromIndex(Map<Integer, String> index) {
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
-        ArrayList<Request> request;
-        if ("Jurídico".equals(value.get(0))) {
-            request = LegalModel.getLegalList().get(key.get(0)).getCart().getRequestList();
-
-        } else {
-            request = NaturalModel.getNaturalList().get(key.get(0)).getCart().getRequestList();
-
-        }
-
-        return request;
-    }
-
-    public DefaultTableModel createTableModelOfRequestData(Map<Integer, String> index) {
+    public DefaultTableModel createTableModelOfRequestData(int index) {
 
         Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
-        ArrayList<Request> request = this.getRequestFromIndex(index);
-        for (int j = 0; j < request.size(); j++) {
-            Product product = ProductModel.getOneProduct(request.get(j).getProduct().getId());
-            model.addRow(new Object[]{request.get(j).getId(), product.getBrand(), product.getDescription(), request.get(j).getQuantity(), product.getPrice(), product.getPrice() * request.get(j).getQuantity(), request.get(j).getCreationDate(), request.get(j).getStatus()});
+        Controller.requestList = RequestModel.getRequestListByClientId(index);
+        for (int j = 0; j < Controller.requestList .size(); j++) {
+            Product product = ProductModel.getOneProduct(Controller.requestList .get(j).getProduct().getId());
+            model.addRow(new Object[]{Controller.requestList .get(j).getId(), product.getBrand(), product.getDescription(), Controller.requestList .get(j).getQuantity(), product.getPrice(), product.getPrice() * Controller.requestList .get(j).getQuantity(), Controller.requestList .get(j).getCreationDate(), Controller.requestList .get(j).getStatus()});
         }
 
         return model;
     }
 
-    public Double getTotalToPay(Map<Integer, String> index) {
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
-        Double total;
-        if ("Jurídico".equals(value.get(0))) {
-            total = LegalModel.getLegalList().get(key.get(0)).getTotalValueToPay();
+    public Double getTotalToPay(int index) {
+        Controller.naturalList = NaturalModel.getNaturalList();
+        Controller.legalList = LegalModel.getLegalList();
 
+        String flat = this.getIndexClientFromClientLists(index);
+        if (flat.charAt(0) == 'N') {
+            flat = flat.replace("N", "");
+            int i = Integer.parseInt(flat);
+            return Controller.naturalList.get(i).getTotalValueToPay();
         } else {
-            total = NaturalModel.getNaturalList().get(key.get(0)).getTotalValueToPay();
-
-        }
-        return total;
-    }
-
-    public void updateMoney(Map<Integer, String> index, Double money) {
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
-
-        if ("Jurídico".equals(value.get(0))) {
-            LegalModel.getLegalList().get(key.get(0)).setMoney(money);
-            LegalModel.getLegalList().get(key.get(0)).toPay(this.getTotalToPay(index), Integer.toString(key.get(0)));
-
-        } else {
-            NaturalModel.getNaturalList().get(key.get(0)).setMoney(money);
-            NaturalModel.getNaturalList().get(key.get(0)).toPay(this.getTotalToPay(index), Integer.toString(key.get(0)));
+            flat = flat.replace("L", "");
+            int i = Integer.parseInt(flat);
+            return Controller.legalList.get(i).getTotalValueToPay();
 
         }
 
+       
     }
 
-    public void updateProductList(Map<Integer, String> index) {
-        ArrayList<Request> request = this.getRequestFromIndex(index);
-        for (int j = 0; j < request.size(); j++) {
-            Integer quantity = ProductModel.getOneProduct(request.get(j).getProduct().getId()).getQuantity() - request.get(j).getQuantity();
+    public void updateMoney(int index, Double money) {
+
+        ClientModel.updateMoney(money, index);
+
+    }
+
+    public void updateProductList(int index) {
+        Controller.requestList  = RequestModel.getRequestListByClientId(index);
+        for (int j = 0; j < Controller.requestList .size(); j++) {
+            Integer quantity = ProductModel.getOneProduct(Controller.requestList .get(j).getProduct().getId()).getQuantity() - Controller.requestList .get(j).getQuantity();
             if (quantity == 0) {
-                ProductModel.deleteProduct(request.get(j).getProduct().getId());
+                ProductModel.deleteProduct(Controller.requestList .get(j).getProduct().getId());
             } else {
-                Product product = ProductModel.getOneProduct(request.get(j).getProduct().getId());
+                Product product = ProductModel.getOneProduct(Controller.requestList .get(j).getProduct().getId());
                 product.setQuantity(quantity);
                 ProductModel.updateProduct(product);
             }
@@ -321,46 +272,52 @@ public class Controller {
 
     }
 
-    public String getBill(Map<Integer, String> index) {
+    public String getBill(int index) {
+        Controller.naturalList = NaturalModel.getNaturalList();
+        Controller.legalList = LegalModel.getLegalList();
 
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
-        String bill;
-
-        if ("Jurídico".equals(value.get(0))) {
-            Payment pay = new Payment(value.get(0) + " " + key.get(0), LegalModel.getLegalList().get(key.get(0)).getTotalValueToPay());
-            LegalModel.getLegalList().get(key.get(0)).getCart().setPay(pay);
-            bill = LegalModel.getLegalList().get(key.get(0)).getCart().getPay().getBill();
+        String flat = this.getIndexClientFromClientLists(index);
+        if (flat.charAt(0) == 'N') {
+            flat = flat.replace("N", "");
+            int i = Integer.parseInt(flat);
+            Payment pay = new Payment(index, Controller.naturalList.get(i).getTotalValueToPay());
+            Controller.naturalList.get(i).toPay(Controller.naturalList.get(i).getTotalValueToPay(), index);
+            NaturalModel.updateNatural(Controller.naturalList.get(i));
+            return pay.getBill();
 
         } else {
-            Payment pay = new Payment(value.get(0) + " " + key.get(0), NaturalModel.getNaturalList().get(key.get(0)).getTotalValueToPay());
-            LegalModel.getLegalList().get(key.get(0)).getCart().setPay(pay);
-            bill = NaturalModel.getNaturalList().get(key.get(0)).getCart().getPay().getBill();
+            flat = flat.replace("L", "");
+            int i = Integer.parseInt(flat);
+            Payment pay = new Payment(index, Controller.legalList.get(i).getTotalValueToPay());
+            Controller.legalList.get(i).toPay(Controller.legalList.get(i).getTotalValueToPay(), index);
+            LegalModel.updateLegal(Controller.legalList.get(i));
+            return pay.getBill();
 
         }
 
-        return bill;
     }
 
-    public void deleteCart(Map<Integer, String> index) {
-        ArrayList<Integer> key = new ArrayList<>(index.keySet());
-        ArrayList<String> value = new ArrayList<>(index.values());
 
-        ShoppingCart cart = new ShoppingCart();
-        if ("Jurídico".equals(value.get(0))) {
-            LegalModel.getLegalList().get(key.get(0)).setCart(cart);
+    public void resetRequestList(int id) {
+        RequestModel.deleteAllRequests(id);
+    }
 
-        } else {
-            NaturalModel.getNaturalList().get(key.get(0)).setCart(cart);
+    private String getIndexClientFromClientLists(int index) {
+        Controller.naturalList = NaturalModel.getNaturalList();
+        Controller.legalList = LegalModel.getLegalList();
 
+
+        for (int i = 0; i < Controller.naturalList.size(); i++) {
+            if (Controller.naturalList.get(i).getId() == index) {
+                return "N" + i;
+            }
         }
-
-        this.resetRequestList();
-
+        for (int i = 0; i < Controller.legalList.size(); i++) {
+            if (Controller.legalList.get(i).getId() == index) {
+                return "L" + i;
+            }
+        }
+        return null;
     }
 
-    public void resetRequestList() {
-        ArrayList<Request> requestList = new ArrayList<>();
-        RequestModel.setRequestList(requestList);
-    }
 }

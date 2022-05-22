@@ -5,6 +5,10 @@
 package models;
 
 import classes.Product;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -13,61 +17,130 @@ import java.util.ArrayList;
  */
 public class ProductModel {
 
-    private static final ArrayList<Product> productList = new ArrayList<>();
-
     public static ArrayList<Product> getProductList() {
-        return productList;
-    }
+        DB_Connection db_connect = new DB_Connection();
 
-  
-   public static void defaultProductList(){
-      productList.add(new Product("1", "pan tajado", "Pan pa' ya", 20, 4200.0, "Bimbo"));
-      productList.add(new Product("2", "cuchilla para afeitar", "Almacenes Éxito", 68,4900.0, "Gillete"));
-      productList.add(new Product("3", "Torta de las tres leches", "Punto caliente", 5, 18200.0, "Deli"));
-      productList.add(new Product("4", "pañuelos", "P&G", 45, 3200.0, "Familia"));
-      productList.add(new Product("5", "pasta ramen", "Oriental Food", 34, 1800.0, "Ajino-men"));
-   }
+        PreparedStatement ps;
+        ResultSet rs;
 
-    //CRUD
-    public static Product getOneProduct(String id) {
-        try {
-            for (int i = 0; i < ProductModel.productList.size(); i++) {
-                if (ProductModel.productList.get(i).getId().equals(id)) {
+        try ( Connection conexion = db_connect.get_connection()) {
+            String query = "SELECT * FROM products";
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+            ArrayList<Product> productList = new ArrayList<>();
+            while (rs.next()) {
+                Product product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
+                productList.add(product);
 
-                    return ProductModel.productList.get(i);
-                }
             }
-        } catch (Exception e) {
-            System.out.println("Client not found: " + e);
+            return productList;
+        } catch (SQLException e) {
+            System.out.println("no se pudieron recuperar los productos");
+            System.out.println(e);
         }
+
         return null;
 
     }
 
-    public static boolean deleteProduct(String id) {
-        for (int i = 0; i < ProductModel.productList.size(); i++) {
-            if (ProductModel.productList.get(i).getId().equals(id)) {
+    //CRUD
+    public static Product getOneProduct(int id) {
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection connection = db_connect.get_connection()) {
+            PreparedStatement ps;
+            ResultSet rs;
 
-                ProductModel.productList.remove(i);
-                for(int j = i; j<ProductModel.productList.size(); j++ ){
-                    ProductModel.productList.get(j).setId(Integer.toString(Integer.parseInt(ProductModel.productList.get(j).getId())-1));
-                }
-                return true;
-            }
+            String query = "select * from products where code = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            ps.close();
+            //String id, String description, String supplier, Integer quantity, Double price, String brand
+            Product product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
+
+            ps.close();
+
+            return product;
+        } catch (SQLException e) {
+            System.out.println("Product was not recovered due to a fatal error has occurred");
+            System.out.println(e);
+            return null;
         }
+
+    }
+
+    public static boolean deleteProduct(int id) {
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "delete from products where code = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();
+
+                ps.close();
+                System.out.println("The product was deleted successfully");
+                return true;
+            } catch (SQLException e) {
+                System.out.println("The product was not deleted due to a fatal error has occurred");
+                System.out.println(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
         return false;
     }
 
-    public static void createProduct(Product Product) {
-        ProductModel.productList.add(Product);
+    public static void createProduct(Product product) {
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "insert into products (description, brand, supplier, price, quantity) values (?, ?, ?, ?, ?)";
+                ps = conexion.prepareStatement(query);
+                ps.setInt(1, product.getId());
+                ps.setString(2, product.getDescription());
+                ps.setString(3, product.getBrand());
+                ps.setString(4, product.getSupplier());
+                ps.setDouble(5, product.getPrice());
+                ps.setInt(6, product.getQuantity());
+               ps.executeUpdate();
+
+                System.out.println("¡New product was created successfully!");
+                ps.close();
+            } catch (SQLException e) {
+                System.out.println("The product was not created due to a fatal error has occurred");
+                System.out.println(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     public static void updateProduct(Product product) {
-        for (int i = 0; i < ProductModel.productList.size(); i++) {
-            if (ProductModel.productList.get(i).getId().equals(product.getId())) {
-
-                ProductModel.productList.set(i, product);
+       DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "update products set description = ?, brand = ?, supplier = ?, price = ?, quantity = ?  where code = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, product.getDescription());
+                ps.setString(2, product.getBrand());
+                ps.setString(3, product.getSupplier());
+                ps.setDouble(4, product.getPrice());
+                ps.setInt(5, product.getQuantity());
+                ps.setInt(6, product.getId());
+                ps.executeUpdate();   
+                ps.close();
+                System.out.println("¡The product was updated successfully!");
+            } catch (SQLException e) {
+                System.out.println("The product not was updated due to a fatal error has occurred");
+                System.out.println(e);
             }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 }

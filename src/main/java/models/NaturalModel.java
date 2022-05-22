@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -17,38 +18,55 @@ import java.util.ArrayList;
  */
 public class NaturalModel {
 
-    private static final ArrayList<Natural> naturalList = new ArrayList<>();
-
-    public static ArrayList<Natural> getNaturalList() {
-        return naturalList;
-    }
-
-    public static void defaultNaturalList() {
-        naturalList.add(new Natural("1083555169", "Alexis", "Rafael del Carmen", "Ávila", "Ortiz", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "alexisavila1991@gmail.com", "1", 1200.0, "3053478433"));
-        naturalList.add(new Natural("1017241138", "Yina", " Juliana", " Micanquer", " Caipe", "Ciudadela Sevilla, cll 66a #55a-51, Medellín, Antioquia", "yinajuliana03@gmail.com", "2", 1000.0, "3173856632"));
-    }
+     public static ArrayList<Natural> getNaturalList(){
+     DB_Connection db_connect = new DB_Connection();
+        
+        PreparedStatement ps;
+        ResultSet rs;
+        
+        try(Connection conexion = db_connect.get_connection())  {        
+            String query="SELECT * FROM naturals inner join clients on naturals.idClient = clients.idClient";
+            ps=conexion.prepareStatement(query);
+            rs=ps.executeQuery();
+            ArrayList<Natural> naturalList = new ArrayList<>();
+            while(rs.next()){
+                    Natural natural = new Natural(rs.getString("CC"), rs.getString("firstname"), rs.getString("secondname"), rs.getString("first lastname"), rs.getString("second lastname"), rs.getString("address"),
+                    rs.getString("email"), rs.getInt("idClient"),
+                    rs.getDouble("money"), rs.getString("phoneNumber")
+            );
+                naturalList.add(natural);
+                
+            }
+            return naturalList;
+        }catch(SQLException e){
+            System.out.println("no se pudieron recuperar los datos de los clientes");
+            System.out.println(e);
+        }
+        
+        return null;
+ 
+ }
 
     //CRUD
-    public static Natural getOneClient(String id) {
+    public static Natural getOneClient(int id) {
 
         DB_Connection db_connect = new DB_Connection();
         try ( Connection connection = db_connect.get_connection()) {
             PreparedStatement ps;
-            ResultSet rsNatural;
-            ResultSet rsClient;
+            ResultSet rs;
 
-            String query = "select * from Natural where CC = ?";
+
+            String query = "select * from naturals inner join clients on naturals.idClient = clients.idClient  where idClient = ?";
             ps = connection.prepareStatement(query);
-            ps.setString(1, id);
-            rsNatural = ps.executeQuery();
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
             ps.close();
-            query = "select * from Clients where idClient = ?";
             ps = connection.prepareStatement(query);
-            ps.setString(1, rsNatural.getString("idClient"));
-            rsClient = ps.executeQuery();
-            Natural natural = new Natural(rsNatural.getString("CC"), rsNatural.getString("firstname"), rsNatural.getString("secondname"), rsNatural.getString("first lastname"), rsNatural.getString("second lastname"), rsClient.getString("address"),
-                     rsClient.getString("email"), Integer.toString(rsClient.getInt("idClient")),
-                     rsClient.getDouble("money"), rsClient.getString("phoneNumber")
+            ps.setString(1, rs.getString("idClient"));
+            rs = ps.executeQuery();
+            Natural natural = new Natural(rs.getString("CC"), rs.getString("firstname"), rs.getString("secondname"), rs.getString("first lastname"), rs.getString("second lastname"), rs.getString("address"),
+                    rs.getString("email"), rs.getInt("idClient"),
+                    rs.getDouble("money"), rs.getString("phoneNumber")
             );
 
             ps.close();
@@ -71,7 +89,7 @@ public class NaturalModel {
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, id);
                 ps.executeUpdate();
-                
+
                 ps.close();
                 System.out.println("The client was deleted successfully");
                 return true;
@@ -82,20 +100,81 @@ public class NaturalModel {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        
+
         return false;
     }
 
-    public static void createNatural(Natural Natural) {
-        NaturalModel.naturalList.add(Natural);
+    public static void createNatural(Natural natural) {
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "insert into clients (address, phoneNumber, email, money) values (?, ?, ?, ?)";
+                ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, natural.getAddress());
+                ps.setString(2, natural.getPhoneNumber());
+                ps.setString(3, natural.getEmail());
+                ps.setDouble(4, natural.getMoney());
+                int rowsInserted = ps.executeUpdate();
+                if (rowsInserted > 0) {
+                    ResultSet generatedKeys = ps.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idClient = generatedKeys.getInt(1);
+                        query = "insert into naturals (CC, firstname, secondname ,`first lastname` ,`second lastname` ,idClient) values (?, ?, ?, ? , ? , ?)";
+                        ps = conexion.prepareStatement(query);
+                        ps.setString(1, natural.getCC());
+                        ps.setString(2, natural.getFirstName());
+                        ps.setString(3, natural.getSecondName());
+                        ps.setString(4, natural.getFirstLastName());
+                        ps.setString(5, natural.getSecondLastName());
+                        ps.setInt(6, idClient);
+                        ps.executeUpdate();
+                        ps.close();
+
+                    }
+                }
+                System.out.println("¡New client was created successfully!");
+                ps.close();
+            } catch (SQLException e) {
+                System.out.println("The client was not created due to a fatal error has occurred");
+                System.out.println(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
     }
 
     public static void updateNatural(Natural natural) {
-        for (int i = 0; i < NaturalModel.naturalList.size(); i++) {
-            if (NaturalModel.naturalList.get(i).getId().equals(natural.getId())) {
-
-                NaturalModel.naturalList.set(i, natural);
+        DB_Connection db_connect = new DB_Connection();
+        try ( Connection conexion = db_connect.get_connection()) {
+            PreparedStatement ps;
+            try {
+                String query = "update clients set address = ?, phoneNumber = ?, email = ?, money = ?  where idClient = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, natural.getAddress());
+                ps.setString(2, natural.getPhoneNumber());
+                ps.setString(3, natural.getEmail());
+                ps.setDouble(4, natural.getMoney());
+                ps.setInt(5, natural.getId());
+                ps.executeUpdate();
+                query = "update naturals set firstname = ?, secondName=?, `first lastname`=?, `second lastname`=? where CC = ?";
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, natural.getFirstName());
+                ps.setString(2, natural.getSecondName());
+                ps.setString(3, natural.getFirstLastName());
+                ps.setString(4, natural.getSecondLastName());
+                ps.setString(5, natural.getCC());
+                   
+                ps.close();
+                System.out.println("¡Natural client was updated successfully!");
+            } catch (SQLException e) {
+                System.out.println("Natural client not was updated due to a fatal error has occurred");
+                System.out.println(e);
             }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
+
     }
 }

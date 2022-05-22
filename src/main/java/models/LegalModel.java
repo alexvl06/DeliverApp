@@ -18,45 +18,55 @@ import java.util.ArrayList;
  */
 public class LegalModel {
 
-    private static final ArrayList<Legal> legalList = new ArrayList<>();
-
     public static ArrayList<Legal> getLegalList() {
-        return legalList;
-    }
+        DB_Connection db_connect = new DB_Connection();
 
-    public static void defaultLegalList() {
-        legalList.add(new Legal("Inter-Telco S.A.S.", "900.382.516-1", "Edificio Prisma, Cra 35A N° 15B-35, Oficina 212, Medellín, Antioquia", "soporte@inter-telco.com", "1", 8500.0, "5200500"));
-        legalList.add(new Legal("SUMMA-sci S.A.S.", "901.033.369-2", "CALLE 51 SUR 48 57 MAYORCA ETAPA 3 TORRE NORTE PISO 12, MEDELLIN, ANTIOQUIA", "shappy@summa-sci.com", "2", 12500.0, "6046398"));
-    }
+        PreparedStatement ps;
+        ResultSet rs;
 
-    private LegalModel() {
+        try ( Connection conexion = db_connect.get_connection()) {
+            String query = "SELECT * FROM legals inner join clients on legals.idClient = clients.idClient";
+            ps = conexion.prepareStatement(query);
+            rs = ps.executeQuery();
+            ArrayList<Legal> legalList = new ArrayList<>();
+            while (rs.next()) {
+                Legal legal = new Legal(rs.getString("business name"), rs.getString("NIT"), rs.getString("address"),
+                         rs.getString("email"), rs.getInt("idClient"),
+                         rs.getDouble("money"), rs.getString("phoneNumber")
+                );
+                legalList.add(legal);
+
+            }
+            return legalList;
+        } catch (SQLException e) {
+            System.out.println("no se pudieron recuperar los datos de los clientes");
+            System.out.println(e);
+        }
+
+        return null;
+
     }
 
     //CRUD
-    public static Legal getOneClient(String id) {
+    public static Legal getOneClient(int id) {
 
         DB_Connection db_connect = new DB_Connection();
         try ( Connection connection = db_connect.get_connection()) {
             PreparedStatement ps;
-            ResultSet rsLegal;
-            ResultSet rsClient;
+            ResultSet rs;
             try {
-                String query = "select * from Legals where NIT = ?";
+                String query = "SELECT * FROM legals inner join clients on legals.idClient = clients.idClient where idClient = ?";
                 ps = connection.prepareStatement(query);
-                ps.setString(1, id);
-                rsLegal = ps.executeQuery();
+                ps.setInt(1, id);
+                rs = ps.executeQuery();
                 ps.close();
-                query = "select * from Clients where idClient = ?";
-                ps = connection.prepareStatement(query);
-                ps.setString(1, rsLegal.getString("idClient"));
-                rsClient = ps.executeQuery();
-                Legal legal = new Legal(rsLegal.getString("business name"), rsLegal.getString("NIT"), rsClient.getString("address")
-                , rsClient.getString("email"), Integer.toString(rsClient.getInt("idClient"))
-                , rsClient.getDouble("money"), rsClient.getString("phoneNumber")
+                Legal legal = new Legal(rs.getString("business name"), rs.getString("NIT"), rs.getString("address"),
+                         rs.getString("email"), rs.getInt("idClient"),
+                         rs.getDouble("money"), rs.getString("phoneNumber")
                 );
 
                 ps.close();
-                
+
                 return legal;
             } catch (SQLException e) {
                 System.out.println("Legal client was not recovered due to a fatal error has occurred");
@@ -68,33 +78,9 @@ public class LegalModel {
             return null;
         }
 
-
-
     }
 
-    public static boolean deleteLegal(String id) {
-        DB_Connection db_connect = new DB_Connection();
-        try ( Connection conexion = db_connect.get_connection()) {
-            PreparedStatement ps;
-            try {
-                String query = "delete from Legals where NIT = ?";
-                ps = conexion.prepareStatement(query);
-                ps.setString(1, id);
-                ps.executeUpdate();
-                
-                ps.close();
-                System.out.println("The client was deleted successfully");
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Client was not deleted due to a fatal error has occurred");
-                System.out.println(e);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        
-        return false;
-    }
+
 
     public static void createLegal(Legal legal) {
         DB_Connection db_connect = new DB_Connection();
@@ -108,9 +94,9 @@ public class LegalModel {
                 ps.setString(3, legal.getEmail());
                 ps.setDouble(4, legal.getMoney());
                 int rowsInserted = ps.executeUpdate();
-                if(rowsInserted>0){
+                if (rowsInserted > 0) {
                     ResultSet generatedKeys = ps.getGeneratedKeys();
-                    if(generatedKeys.next()){
+                    if (generatedKeys.next()) {
                         int idClient = generatedKeys.getInt(1);
                         query = "insert into Legals (NIT, `business name`, idClient) values (?, ?, ?)";
                         ps = conexion.prepareStatement(query);
@@ -119,7 +105,7 @@ public class LegalModel {
                         ps.setInt(3, idClient);
                         ps.executeUpdate();
                         ps.close();
-                    
+
                     }
                 }
                 System.out.println("¡New client was created successfully!");
@@ -131,11 +117,10 @@ public class LegalModel {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        LegalModel.legalList.add(legal);
     }
 
     public static void updateLegal(Legal legal) {
-        
+
         DB_Connection db_connect = new DB_Connection();
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
@@ -146,12 +131,12 @@ public class LegalModel {
                 ps.setString(2, legal.getPhoneNumber());
                 ps.setString(3, legal.getEmail());
                 ps.setDouble(4, legal.getMoney());
-                ps.setInt(5, Integer.parseInt(legal.getId()));
+                ps.setInt(5, legal.getId());
                 ps.executeUpdate();
                 query = "update Legals set `business name` = ? where NIT = ?";
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, legal.getBusinessName());
-                ps.setString(1, legal.getNIT());
+                ps.setString(2, legal.getNIT());
                 ps.close();
                 System.out.println("¡Legal client was updated successfully!");
             } catch (SQLException e) {
@@ -161,12 +146,8 @@ public class LegalModel {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        for (int i = 0; i < LegalModel.legalList.size(); i++) {
-            if (LegalModel.legalList.get(i).getId().equals(legal.getId())) {
 
-                LegalModel.legalList.set(i, legal);
-            }
-        }
     }
+    
 
 }

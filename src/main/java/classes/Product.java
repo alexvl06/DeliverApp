@@ -10,24 +10,19 @@ package classes;
  */
 public class Product extends ProductLine {
 
-    private String id;
+    private int id;
     private String description;
     private String brand;
     private String supplier;
-    private double price;
 
 
 
     public void setPrice(double price) {
         this.price = price;
-    }
+    } 
 
-
-
+    public Product(String description, String supplier, Integer quantity, Double price, String brand) {
  
-
-    public Product(String id, String description, String supplier, Integer quantity, Double price, String brand) {
-        this.id = id;
         this.description = description;
         this.supplier = supplier;
         this.quantity = quantity;
@@ -59,11 +54,11 @@ public class Product extends ProductLine {
         this.supplier = supplier;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

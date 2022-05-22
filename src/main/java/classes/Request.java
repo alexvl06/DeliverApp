@@ -13,12 +13,22 @@ import java.util.Date;
  */
 public class Request {
 
-    private String id;
+    private int id;
     private Product product;
     private final Date creationDate;
     private Integer quantity;
     private String status;
+    private int idClient;
 
+    public int getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
+    }
+
+    
     public Product getProduct() {
         return product;
     }
@@ -36,11 +46,11 @@ public class Request {
 
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -52,7 +62,8 @@ public class Request {
         this.status = status;
     }
 
-    public Request(Product product, Integer quantity) {
+    public Request(Product product, Integer quantity, int idClient) {
+        this.idClient = idClient;
         this.product = product;
         this.quantity = quantity;
         this.status = "Pendiente";

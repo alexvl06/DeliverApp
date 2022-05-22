@@ -15,13 +15,13 @@ public class Payment {
 
     private final String id;
     private final Date creationDate;
-    private final String userId;
+    private final int userId;
     private final Double value;
 
 
 
  
-    public Payment(String userId, Double value) {
+    public Payment(int userId, Double value) {
        Random random = new Random();
         
         this.id = Integer.toString(random.nextInt(0+100));
