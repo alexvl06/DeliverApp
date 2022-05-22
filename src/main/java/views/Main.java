@@ -7,9 +7,12 @@ package views;
 import Controller.Controller;
 import classes.*;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -198,9 +201,13 @@ public class Main extends javax.swing.JFrame {
 
         CCLabel.setText("C.C.");
 
-        CC.setForeground(new java.awt.Color(255, 255, 255));
         CC.setText("*");
         CC.setToolTipText("");
+        CC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CCActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -229,16 +236,13 @@ public class Main extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(FirstLastNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(SecondLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(SecondFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(CCLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CC))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(SecondFirstname, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                            .addComponent(SecondLastName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CCLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(CC))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -325,7 +329,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(UpdateClient)
                     .addComponent(DeleteClient)
                     .addComponent(LoadClient))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         Clientes.addTab("Clientes", jPanel1);
@@ -421,41 +425,21 @@ public class Main extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(addProduct)
-                .addGap(18, 18, 18)
-                .addComponent(updateProduct)
-                .addGap(18, 18, 18)
-                .addComponent(deleteProduct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(LoadProduct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buyingBtn)
-                .addGap(58, 58, 58))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
-                        .addGap(8, 8, 8)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(123, 123, 123)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel12)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
-                                    .addComponent(SelectedClient)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7)
-                                    .addGap(16, 16, 16)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGap(108, 108, 108)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(131, 131, 131)
+                                .addComponent(jLabel12))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SelectedClient)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -479,14 +463,30 @@ public class Main extends javax.swing.JFrame {
                                 .addGap(31, 31, 31)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(addRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(addRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(41, 41, 41)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(42, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(addProduct)
+                .addGap(18, 18, 18)
+                .addComponent(updateProduct)
+                .addGap(18, 18, 18)
+                .addComponent(deleteProduct)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(LoadProduct)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buyingBtn)))
+                .addGap(33, 33, 33))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,22 +496,24 @@ public class Main extends javax.swing.JFrame {
                         .addGap(16, 16, 16)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(SelectedClient))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(addRequest)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton6))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(SelectedClient)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel8))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(addRequest)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton6))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(14, 14, 14)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -683,19 +685,19 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here
         Controller controller = new Controller();
 
-        this.phone.setText("");
-        this.email.setText("");
-        this.money.setText("");
-        this.address.setText("");
-        this.FirstNameInput.setText("");
+        this.phone.setText("*");
+        this.email.setText("*");
+        this.money.setText("*");
+        this.address.setText("*");
+        this.FirstNameInput.setText("*");
         this.SecondFirstname.setText("");
-        this.FirstLastNameInput.setText("");
+        this.FirstLastNameInput.setText("*");
         this.SecondLastName.setText("");
         this.CC.setEnabled(true);
         Color color = new Color(0, 0, 0);
         this.CCLabel.setForeground(color);
-        this.clientList.removeAll();
-        this.clientList.revalidate();
+        Main.clientList.removeAll();
+        Main.clientList.revalidate();
 
         if (this.TypeClient.getSelectedItem() == "Jurídico") {
             this.address.getText();
@@ -708,16 +710,16 @@ public class Main extends javax.swing.JFrame {
             this.CC.setEnabled(false);
             color = new Color(242, 242, 242);
             this.CCLabel.setForeground(color);
-            this.SecondLastName.setText(" ");
-            this.clientList.setModel(Controller.createClientJlistModel("Jurídico"));
+            this.SecondLastName.setText("");
+            Main.clientList.setModel(Controller.createClientJlistModel("Jurídico"));
 
         } else {
-
+            this.CC.setEnabled(true);
             this.Name.setText("Nombres");
             this.Second_id.setText("Apellidos");
             this.SecondFirstname.setEnabled(true);
             this.SecondLastName.setEnabled(true);
-            this.clientList.setModel(Controller.createClientJlistModel("Natural"));
+            Main.clientList.setModel(Controller.createClientJlistModel("Natural"));
 
         }
         this.productList.setModel(controller.createProductJlistModel());
@@ -767,14 +769,21 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         Controller controller = new Controller();
-        int i = this.clientList.getSelectedIndex();
-        String itemSelected = Integer.toString(i);
-        if (itemSelected.isEmpty()) {
+        int i = Main.clientList.getSelectedIndex();
+        String clientName = "";
+        if (i == -1) {
             JOptionPane.showMessageDialog(null, "No hay elemento seleccionado");
         } else {
-            this.idClient = Integer.parseInt(this.clientList.getSelectedValue().split(".")[0]);
-            this.SelectedClient.setText(this.clientList.getSelectedValue());
-            this.SelectedToPay.setText(this.clientList.getSelectedValue());
+            String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+            clientName += rowClientList[1];
+            if (rowClientList.length > 2) {
+                for (int j = 2; j < rowClientList.length; j++) {
+                    clientName += "." + rowClientList[j];
+                }
+            }
+            this.idClient = Integer.parseInt(rowClientList[0]);
+            this.SelectedClient.setText(clientName);
+            this.SelectedToPay.setText(clientName);
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
                 Legal client = controller.getLegalData(idClient);
                 this.phone.setText(client.getPhoneNumber());
@@ -788,6 +797,7 @@ public class Main extends javax.swing.JFrame {
                 this.SecondLastName.setText(" ");
             } else {
                 Natural client = controller.getNaturalData(idClient);
+                this.CC.setText(client.getCC());
                 this.phone.setText(client.getPhoneNumber());
                 this.email.setText(client.getEmail());
                 this.money.setText(Double.toString(client.getMoney()));
@@ -805,8 +815,10 @@ public class Main extends javax.swing.JFrame {
     private void DeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteClientActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        String i = Integer.toString(this.clientList.getSelectedIndex());
-        if (i.isEmpty()) {
+        int i = Main.clientList.getSelectedIndex();
+        String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+        this.idClient = Integer.parseInt(rowClientList[0]);
+        if (i == -1) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún cliente.");
         } else {
             if (controller.deletedClient(idClient)) {
@@ -824,6 +836,8 @@ public class Main extends javax.swing.JFrame {
     private void UpdateClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateClientActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
+        String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+        this.idClient = Integer.parseInt(rowClientList[0]);
 
         String adr = this.address.getText();
         String phoneNumber = this.phone.getText();
@@ -833,7 +847,6 @@ public class Main extends javax.swing.JFrame {
         String secondName = this.SecondFirstname.getText();
         String firstLastName = this.FirstLastNameInput.getText();
         String secondLastName = this.SecondLastName.getText();
-        int itemSelected = this.clientList.getSelectedIndex();
         String cc = this.CC.getText();
 
         if ("".equals(cc) || "".equals(adr) || "".equals(phoneNumber) || "".equals(mail) || "".equals(coins) || "".equals(firstName) || "".equals(firstLastName)) {
@@ -842,11 +855,11 @@ public class Main extends javax.swing.JFrame {
 
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
 
-                controller.updateClient(firstName, firstLastName, adr, mail, itemSelected, Double.parseDouble(coins), phoneNumber);
+                controller.updateClient(firstName, firstLastName, adr, mail, idClient, Double.parseDouble(coins), phoneNumber);
                 this.TypeClient.setSelectedIndex(1);
             } else {
 
-                controller.updateClient(cc, firstName, secondName, firstLastName, secondLastName, adr, itemSelected, mail, Double.parseDouble(coins), phoneNumber);
+                controller.updateClient(cc, firstName, secondName, firstLastName, secondLastName, adr, idClient, mail, Double.parseDouble(coins), phoneNumber);
                 this.TypeClient.setSelectedIndex(0);
             }
 
@@ -864,7 +877,6 @@ public class Main extends javax.swing.JFrame {
     private void addProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        
 
         String br = this.brand.getText();
         String sup = this.supplier.getText();
@@ -884,13 +896,14 @@ public class Main extends javax.swing.JFrame {
     private void updateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProductActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
+        String[] rowClientList = this.productList.getSelectedValue().split("\\.");
+        int i = Integer.parseInt(rowClientList[0]);
 
         String br = this.brand.getText();
         String sup = this.supplier.getText();
         String value = this.price.getText();
         String quant = this.quantity.getText();
         String desc = this.description.getText();
-        int i = this.productList.getSelectedIndex();
 
         if ("".equals(br) || "".equals(sup) || "".equals(value) || "".equals(quant) || "".equals(desc)) {
             JOptionPane.showMessageDialog(rootPane, "Todos lo campos son obligatorios.");
@@ -905,7 +918,8 @@ public class Main extends javax.swing.JFrame {
     private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int i = this.productList.getSelectedIndex();
+        String[] rowClientList = this.productList.getSelectedValue().split("\\.");
+        int i = Integer.parseInt(rowClientList[0]);
         if (i == -1) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún producto.");
         } else {
@@ -924,7 +938,8 @@ public class Main extends javax.swing.JFrame {
     private void LoadProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadProductActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int i = this.productList.getSelectedIndex();
+        String[] rowClientList = this.productList.getSelectedValue().split("\\.");
+        int i = Integer.parseInt(rowClientList[0]);
         if (i == -1) {
             JOptionPane.showMessageDialog(null, "No hay elemento seleccionado");
         } else {
@@ -942,18 +957,25 @@ public class Main extends javax.swing.JFrame {
     private void addRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRequestActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int[] indexs = this.productList.getSelectedIndices();
-
-        DefaultListModel model = controller.createRequestsList(indexs,idClient, false);
+        List<String> selectedValueList = this.productList.getSelectedValuesList();
+        ArrayList<Integer> indexs = new ArrayList<>();
+        selectedValueList.forEach(element -> {
+            indexs.add(Integer.parseInt(element.split("\\.")[0]));
+        });
+        DefaultListModel model = controller.createRequestsList(indexs, idClient, false);
         this.requestList.setModel(model);
     }//GEN-LAST:event_addRequestActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int[] indexs = this.requestList.getSelectedIndices();
+        List<String> selectedValueList = this.productList.getSelectedValuesList();
+        ArrayList<Integer> indexs = new ArrayList<>();
+        selectedValueList.forEach(element -> {
+            indexs.add(Integer.parseInt(element.split("\\.")[0]));
+        });
 
-        DefaultListModel model = controller.createRequestsList(indexs,idClient,  true);
+        DefaultListModel model = controller.createRequestsList(indexs, idClient, true);
         this.requestList.setModel(model);
 
 
@@ -963,7 +985,7 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
 
-        if (idClient==0) {
+        if (idClient == 0) {
             JOptionPane.showMessageDialog(null, "Para solicitar la compra debes seleccionar un cliente.");
         } else {
             DefaultTableModel model = controller.createTableModelOfRequestData(idClient);
@@ -1016,6 +1038,10 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_FirstLastNameInputActionPerformed
 
+    private void CCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CCActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1043,6 +1069,9 @@ public class Main extends javax.swing.JFrame {
         }
         //</editor-fold>
         Controller.startTemporalDB();
+        DefaultListModel model = Controller.createClientJlistModel("Natural");
+        Main.clientList = new JList<>();
+        Main.clientList.setModel(model);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -1075,7 +1104,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
     private javax.swing.JButton buyingBtn;
-    private javax.swing.JList<String> clientList;
+    private static javax.swing.JList<String> clientList;
     private javax.swing.JLabel clientMoney;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;

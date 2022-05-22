@@ -31,8 +31,8 @@ public class LegalModel {
             ArrayList<Legal> legalList = new ArrayList<>();
             while (rs.next()) {
                 Legal legal = new Legal(rs.getString("business name"), rs.getString("NIT"), rs.getString("address"),
-                         rs.getString("email"), rs.getInt("idClient"),
-                         rs.getDouble("money"), rs.getString("phoneNumber")
+                        rs.getString("email"), rs.getInt("idClient"),
+                        rs.getDouble("money"), rs.getString("phoneNumber")
                 );
                 legalList.add(legal);
 
@@ -49,21 +49,23 @@ public class LegalModel {
 
     //CRUD
     public static Legal getOneClient(int id) {
+        Legal legal = new Legal();
 
         DB_Connection db_connect = new DB_Connection();
         try ( Connection connection = db_connect.get_connection()) {
             PreparedStatement ps;
             ResultSet rs;
             try {
-                String query = "SELECT * FROM legals inner join clients on legals.idClient = clients.idClient where idClient = ?";
+                String query = "SELECT * FROM legals inner join clients on legals.idClient = clients.idClient where clients.idClient = ?";
                 ps = connection.prepareStatement(query);
                 ps.setInt(1, id);
                 rs = ps.executeQuery();
-                ps.close();
-                Legal legal = new Legal(rs.getString("business name"), rs.getString("NIT"), rs.getString("address"),
-                         rs.getString("email"), rs.getInt("idClient"),
-                         rs.getDouble("money"), rs.getString("phoneNumber")
-                );
+                while (rs.next()) {
+                    legal = new Legal(rs.getString("business name"), rs.getString("NIT"), rs.getString("address"),
+                            rs.getString("email"), rs.getInt("idClient"),
+                            rs.getDouble("money"), rs.getString("phoneNumber")
+                    );
+                }
 
                 ps.close();
 
@@ -79,8 +81,6 @@ public class LegalModel {
         }
 
     }
-
-
 
     public static void createLegal(Legal legal) {
         DB_Connection db_connect = new DB_Connection();
@@ -104,7 +104,6 @@ public class LegalModel {
                         ps.setString(2, legal.getBusinessName());
                         ps.setInt(3, idClient);
                         ps.executeUpdate();
-                        ps.close();
 
                     }
                 }
@@ -137,6 +136,7 @@ public class LegalModel {
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, legal.getBusinessName());
                 ps.setString(2, legal.getNIT());
+                ps.executeUpdate();
                 ps.close();
                 System.out.println("¡Legal client was updated successfully!");
             } catch (SQLException e) {
@@ -148,6 +148,5 @@ public class LegalModel {
         }
 
     }
-    
 
 }

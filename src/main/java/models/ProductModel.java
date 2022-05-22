@@ -30,6 +30,7 @@ public class ProductModel {
             ArrayList<Product> productList = new ArrayList<>();
             while (rs.next()) {
                 Product product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
+                product.setId(rs.getInt("code"));
                 productList.add(product);
 
             }
@@ -45,6 +46,7 @@ public class ProductModel {
 
     //CRUD
     public static Product getOneProduct(int id) {
+        Product product = null;
         DB_Connection db_connect = new DB_Connection();
         try ( Connection connection = db_connect.get_connection()) {
             PreparedStatement ps;
@@ -54,10 +56,10 @@ public class ProductModel {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             rs = ps.executeQuery();
-            ps.close();
-            //String id, String description, String supplier, Integer quantity, Double price, String brand
-            Product product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
+            while(rs.next()){
+               product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
 
+            }
             ps.close();
 
             return product;
@@ -100,12 +102,11 @@ public class ProductModel {
             try {
                 String query = "insert into products (description, brand, supplier, price, quantity) values (?, ?, ?, ?, ?)";
                 ps = conexion.prepareStatement(query);
-                ps.setInt(1, product.getId());
-                ps.setString(2, product.getDescription());
-                ps.setString(3, product.getBrand());
-                ps.setString(4, product.getSupplier());
-                ps.setDouble(5, product.getPrice());
-                ps.setInt(6, product.getQuantity());
+                ps.setString(1, product.getDescription());
+                ps.setString(2, product.getBrand());
+                ps.setString(3, product.getSupplier());
+                ps.setDouble(4, product.getPrice());
+                ps.setInt(5, product.getQuantity());
                ps.executeUpdate();
 
                 System.out.println("¡New product was created successfully!");
