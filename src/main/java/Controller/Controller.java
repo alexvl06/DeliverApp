@@ -21,12 +21,12 @@ public class Controller {
     public static ArrayList<Natural> naturalList = new ArrayList<>();
     public static ArrayList<Product> productList = new ArrayList<>();
     public static ArrayList<Request> requestList = new ArrayList<>();
+    public boolean listAccepted;
 
     public static void startTemporalDB() {
         Controller.legalList = LegalModel.getLegalList();
         Controller.naturalList = NaturalModel.getNaturalList();
         Controller.productList = ProductModel.getProductList();
-        Controller.requestList = RequestModel.getRequestList();
     }
 
     public static DefaultListModel createClientJlistModel(String type) {
@@ -40,17 +40,17 @@ public class Controller {
                 if (Controller.naturalList.get(i).getSecondName() != null) {
 
                     secondName = Controller.naturalList.get(i).getSecondName();
-                }else{
+                } else {
                     secondName = "";
                 }
 
                 if (Controller.naturalList.get(i).getSecondLastName() != null) {
 
                     secondLastName = Controller.naturalList.get(i).getSecondLastName();
-                }else{
+                } else {
                     secondLastName = "";
                 }
-                model.addElement(Controller.naturalList.get(i).getId() + ". " +Controller.naturalList.get(i).getFirstName()+ " "+secondName + " " + Controller.naturalList.get(i).getFirstLastName() + " " + secondLastName);
+                model.addElement(Controller.naturalList.get(i).getId() + ". " + Controller.naturalList.get(i).getFirstName() + " " + secondName + " " + Controller.naturalList.get(i).getFirstLastName() + " " + secondLastName);
 
             }
 
@@ -143,39 +143,32 @@ public class Controller {
         return product;
     }
 
-    public DefaultListModel createRequestsList(ArrayList<Integer> indexs, int idClient, boolean decrementFlat) {
+    public DefaultListModel createRequestsList(ArrayList<Integer> productIds, int idClient, boolean decrementFlat) {
+
         Controller.requestList = RequestModel.getRequestListByClientId(idClient);
-        ArrayList<Integer> indexList = new ArrayList<>();
-        for (int i = 0; i < indexs.size(); i++) {
-            indexList.add(indexs.get(i));
-        }
 
-        DefaultListModel model;
-
-        if (RequestModel.getRequestList().isEmpty()) {
+        if (RequestModel.getRequestListByClientId(idClient).isEmpty()) {
 
             if (!decrementFlat) {
-                this.addRequest(indexList, idClient);
+                this.addRequest(productIds, idClient);
             }
-            model = this.createRequestModel(idClient);
 
         } else {
 
-            boolean listAccepted = true;
+            this.listAccepted = true;
 
-            for (int i = 0; i < indexs.length; i++) {
-
+            for (int i = 0; i < productIds.size(); i++) {
+                Product product = ProductModel.getOneProduct(productIds.get(i));
                 for (int j = 0; j < Controller.requestList.size(); j++) {
-                    if (Controller.requestList.get(j).getProduct().getId() == indexs[i]) {
-                        if ((!decrementFlat && Controller.requestList.get(j).getQuantity().equals(ProductModel.getOneProduct(Controller.requestList.get(j).getProduct().getId()).getQuantity())) || (decrementFlat && Controller.requestList.get(j).getQuantity().equals(1))) {
-                            listAccepted = false;
+                    if (Controller.requestList.get(j).getProduct().getId() == productIds.get(i)) {
+                        if ((!decrementFlat && Controller.requestList.get(j).getQuantity().equals(product.getQuantity())) || (decrementFlat && Controller.requestList.get(j).getQuantity().equals(1))) {
+                            this.listAccepted = false;
                             if (decrementFlat) {
-                                ArrayList<Integer> integerList = new ArrayList<>();
-                                integerList.add(indexs[i]);
-                                this.removeRequest(integerList);
+
+                                this.removeRequest(Controller.requestList.get(j).getId());
 
                             }
-                            break;
+
                         } else {
                             if (decrementFlat) {
                                 Controller.requestList.get(j).decreaseQuantity();
@@ -186,7 +179,7 @@ public class Controller {
                             }
                             RequestModel.updateRequest(Controller.requestList.get(j));
 
-                            indexList.remove(new Integer(indexs[i]));
+                            productIds.remove(productIds.get(i));
 
                         }
 
@@ -195,22 +188,21 @@ public class Controller {
                 }
 
             }
-            if (listAccepted) {
-                this.addRequest(indexList, idClient);
+            if (this.listAccepted) {
+                this.addRequest(productIds, idClient);
             }
-
-            model = this.createRequestModel(idClient);
-
         }
-        return model;
+        return this.createRequestModel(idClient);
+
     }
 
-    private DefaultListModel createRequestModel(int id) {
+    public DefaultListModel createRequestModel(int id) {
         DefaultListModel model = new DefaultListModel();
 
         Controller.requestList = RequestModel.getRequestListByClientId(id);
         for (int i = 0; i < Controller.requestList.size(); i++) {
             Product product = ProductModel.getOneProduct(Controller.requestList.get(i).getProduct().getId());
+
             model.addElement(Controller.requestList.get(i).getId() + ". " + product.getDescription() + " " + product.getBrand() + " (" + Controller.requestList.get(i).getQuantity() + ")");
 
         }
@@ -218,19 +210,19 @@ public class Controller {
 
     }
 
-    private void addRequest(ArrayList<Integer> indexs, int idClient) {
-        for (int i = 0; i < indexs.size(); i++) {
-            Product product = ProductModel.getOneProduct(indexs.get(i));
+    private void addRequest(ArrayList<Integer> productIndexs, int idClient) {
+        for (int i = 0; i < productIndexs.size(); i++) {
+            Product product = ProductModel.getOneProduct(productIndexs.get(i));
+
             Request request = new Request(product, 1, idClient);
             RequestModel.createRequest(request);
         }
     }
 
-    private void removeRequest(ArrayList<Integer> indexs) {
-        for (int i = 0; i < indexs.size(); i++) {
+    private void removeRequest(int id) {
 
-            RequestModel.deleteRequest(indexs.get(i));
-        }
+        RequestModel.deleteRequest(id);
+
     }
 
     public DefaultTableModel createTableModelOfRequestData(int index) {

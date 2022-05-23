@@ -4,7 +4,6 @@
  */
 package classes;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -15,7 +14,7 @@ public class Request {
 
     private int id;
     private Product product;
-    private final Date creationDate;
+    private Date creationDate;
     private Integer quantity;
     private String status;
     private int idClient;
@@ -28,7 +27,6 @@ public class Request {
         this.idClient = idClient;
     }
 
-    
     public Product getProduct() {
         return product;
     }
@@ -37,14 +35,13 @@ public class Request {
         this.product = product;
     }
 
-    public String getCreationDate() {
-        DateFormat dateShort = DateFormat.getDateInstance(DateFormat.SHORT);
-        DateFormat timeShort = DateFormat.getTimeInstance(DateFormat.SHORT);
-        return dateShort.format(this.creationDate) + " " + timeShort.format(this.creationDate);
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-
-
+    public void setCreationDate(Date date) {
+        this.creationDate = date;
+    }
 
     public int getId() {
         return id;
@@ -73,7 +70,6 @@ public class Request {
     public Integer getQuantity() {
         return quantity;
     }
-
 
     public void increaseQuantity() {
         int q = this.getQuantity();

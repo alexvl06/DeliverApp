@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -18,33 +20,7 @@ import java.util.ArrayList;
  */
 public class RequestModel {
 
-    public static ArrayList<Request> getRequestList() {
-        DB_Connection db_connect = new DB_Connection();
-
-        PreparedStatement ps;
-        ResultSet rs;
-
-        try ( Connection conexion = db_connect.get_connection()) {
-            String query = "SELECT * FROM requests";
-            ps = conexion.prepareStatement(query);
-            rs = ps.executeQuery();
-            ArrayList<Request> requestList = new ArrayList<>();
-            while (rs.next()) {
-                //Product product, Integer quantity
-                Product product = ProductModel.getOneProduct(rs.getInt("code"));
-                Request request = new Request(product, rs.getInt("quantity"), rs.getInt("idClient"));
-                requestList.add(request);
-
-            }
-            return requestList;
-        } catch (SQLException e) {
-            System.out.println("no se pudieron recuperar los pedidos");
-            System.out.println(e);
-        }
-
-        return null;
-
-    }
+    
     //CRUD
 
     public static ArrayList<Request> getRequestListByClientId(int id) {
@@ -63,9 +39,13 @@ public class RequestModel {
                 //Product product, Integer quantity
                 Product product = ProductModel.getOneProduct(rs.getInt("code"));
                 Request request = new Request(product, rs.getInt("quantity"), rs.getInt("idClient"));
+                request.setId(rs.getInt("idRequest"));
+                request.setCreationDate(new Date(rs.getTimestamp("creation_date").getTime()));
+                request.setStatus(rs.getString("status"));
                 requestList.add(request);
 
             }
+            rs.close();
             return requestList;
         } catch (SQLException e) {
             System.out.println("no se pudieron recuperar los pedidos");
@@ -81,7 +61,7 @@ public class RequestModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "delete from requests where id = ?";
+                String query = "delete from requests where idRequest = ?";
                 ps = conexion.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();
@@ -129,9 +109,9 @@ public class RequestModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "insert into request (creation_date, quantity, status, code, idClient) values (?, ?, ?, ?, ?)";
+                String query = "insert into requests (creation_date, quantity, status, code, idClient) values (?, ?, ?, ?, ?)";
                 ps = conexion.prepareStatement(query);
-                ps.setString(1, request.getCreationDate());
+                ps.setTimestamp(1, new Timestamp(request.getCreationDate().getTime()));
                 ps.setInt(2, request.getQuantity());
                 ps.setString(3, request.getStatus());
                 ps.setInt(4, request.getProduct().getId());
@@ -156,7 +136,7 @@ public class RequestModel {
             try {
                 String query = "update requests set creation_date = ?, quantity = ?, status = ?, code = ?, idClient = ?  where idRequest = ?";
                 ps = conexion.prepareStatement(query);
-                ps.setString(1, request.getCreationDate());
+                ps.setTimestamp(1, new Timestamp(request.getCreationDate().getTime()));
                 ps.setInt(2, request.getQuantity());
                 ps.setString(3, request.getStatus());
                 ps.setInt(4, request.getProduct().getId());

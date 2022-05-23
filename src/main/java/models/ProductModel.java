@@ -58,6 +58,7 @@ public class ProductModel {
             rs = ps.executeQuery();
             while(rs.next()){
                product = new Product(rs.getString("description"), rs.getString("supplier"), rs.getInt("quantity"), rs.getDouble("price"), rs.getString("brand"));
+               product.setId(id);
 
             }
             ps.close();

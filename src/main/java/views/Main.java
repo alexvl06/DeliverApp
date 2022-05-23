@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 public class Main extends javax.swing.JFrame {
 
     Map<Integer, String> index;
-    int idClient, code, idRequest;
+    int idClient, code = -1, idRequest;
 
     /**
      * Creates new form Main
@@ -499,8 +499,8 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(SelectedClient)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8))))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -897,7 +897,7 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
         String[] rowClientList = this.productList.getSelectedValue().split("\\.");
-        int i = Integer.parseInt(rowClientList[0]);
+        this.code = Integer.parseInt(rowClientList[0]);
 
         String br = this.brand.getText();
         String sup = this.supplier.getText();
@@ -909,7 +909,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Todos lo campos son obligatorios.");
         } else {
 
-            controller.updateProduct(i, br, sup, value, quant, desc);
+            controller.updateProduct(this.code, br, sup, value, quant, desc);
             this.productList.setModel(controller.createProductJlistModel());
 
         }
@@ -919,14 +919,15 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
         String[] rowClientList = this.productList.getSelectedValue().split("\\.");
-        int i = Integer.parseInt(rowClientList[0]);
-        if (i == -1) {
+        this.code = Integer.parseInt(rowClientList[0]);
+
+        if (this.productList.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún producto.");
         } else {
-            if (controller.deletedProduct(i)) {
-                System.out.println("indice de producto: " + i);
+            if (controller.deletedProduct(this.code)) {
                 this.productList.setModel(controller.createProductJlistModel());
                 JOptionPane.showMessageDialog(null, "Producto eliminado con éxito");
+                this.code = -1;
             } else {
 
                 JOptionPane.showMessageDialog(rootPane, "producto no encontrado en la base de datos.");
@@ -939,12 +940,12 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
         String[] rowClientList = this.productList.getSelectedValue().split("\\.");
-        int i = Integer.parseInt(rowClientList[0]);
-        if (i == -1) {
+        this.code = Integer.parseInt(rowClientList[0]);
+        if (this.productList.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "No hay elemento seleccionado");
         } else {
 
-            Product product = controller.getProductData(i);
+            Product product = controller.getProductData(this.code);
             this.brand.setText(product.getBrand());
             this.supplier.setText(product.getSupplier());
             this.price.setText(Double.toString(product.getPrice()));
@@ -957,27 +958,40 @@ public class Main extends javax.swing.JFrame {
     private void addRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRequestActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
+        String[] rowClientList = this.productList.getSelectedValue().split("\\.");
+        this.code = Integer.parseInt(rowClientList[0]);
         List<String> selectedValueList = this.productList.getSelectedValuesList();
         ArrayList<Integer> indexs = new ArrayList<>();
         selectedValueList.forEach(element -> {
             indexs.add(Integer.parseInt(element.split("\\.")[0]));
+
         });
-        DefaultListModel model = controller.createRequestsList(indexs, idClient, false);
-        this.requestList.setModel(model);
+        if (this.code == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder agregarlo en la lista de peticiones");
+        } else {
+            DefaultListModel model = controller.createRequestsList(indexs, idClient, false);
+            this.requestList.setModel(model);
+        }
+
     }//GEN-LAST:event_addRequestActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
+        String[] rowClientList = this.productList.getSelectedValue().split("\\.");
+        this.code = Integer.parseInt(rowClientList[0]);
         List<String> selectedValueList = this.productList.getSelectedValuesList();
-        ArrayList<Integer> indexs = new ArrayList<>();
+        ArrayList<Integer> productIndexs = new ArrayList<>();
         selectedValueList.forEach(element -> {
-            indexs.add(Integer.parseInt(element.split("\\.")[0]));
+            productIndexs.add(Integer.parseInt(element.split("\\.")[0]));
         });
 
-        DefaultListModel model = controller.createRequestsList(indexs, idClient, true);
-        this.requestList.setModel(model);
-
+        if (this.code == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto para poder agregarlo en la lista de peticiones");
+        } else {
+            DefaultListModel model = controller.createRequestsList(productIndexs, idClient, true);
+            this.requestList.setModel(model);
+        }
 
     }//GEN-LAST:event_jButton6ActionPerformed
 
