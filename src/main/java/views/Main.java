@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 public class Main extends javax.swing.JFrame {
 
     Map<Integer, String> index;
-    int idClient, code = -1, idRequest;
+    int idClient = -1, code = -1, idRequest;
 
     /**
      * Creates new form Main
@@ -999,7 +999,7 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         Controller controller = new Controller();
 
-        if (idClient == 0) {
+        if (idClient == -1) {
             JOptionPane.showMessageDialog(null, "Para solicitar la compra debes seleccionar un cliente.");
         } else {
             DefaultTableModel model = controller.createTableModelOfRequestData(idClient);

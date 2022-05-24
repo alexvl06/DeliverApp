@@ -161,8 +161,9 @@ public class Controller {
                 Product product = ProductModel.getOneProduct(productIds.get(i));
                 for (int j = 0; j < Controller.requestList.size(); j++) {
                     if (Controller.requestList.get(j).getProduct().getId() == productIds.get(i)) {
+                         this.listAccepted = false;
                         if ((!decrementFlat && Controller.requestList.get(j).getQuantity().equals(product.getQuantity())) || (decrementFlat && Controller.requestList.get(j).getQuantity().equals(1))) {
-                            this.listAccepted = false;
+                           
                             if (decrementFlat) {
 
                                 this.removeRequest(Controller.requestList.get(j).getId());
@@ -178,8 +179,7 @@ public class Controller {
 
                             }
                             RequestModel.updateRequest(Controller.requestList.get(j));
-
-                            productIds.remove(productIds.get(i));
+                            productIds.set(0,productIds.get(i));
 
                         }
 
@@ -197,6 +197,7 @@ public class Controller {
     }
 
     public DefaultListModel createRequestModel(int id) {
+        
         DefaultListModel model = new DefaultListModel();
 
         Controller.requestList = RequestModel.getRequestListByClientId(id);
