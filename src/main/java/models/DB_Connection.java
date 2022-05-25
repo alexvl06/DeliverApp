@@ -17,7 +17,7 @@ public class DB_Connection {
     public Connection get_connection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/deliver_db", "root", "Argenis0rtiz.");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/deliver_db", "root", "Exito2018");
 
         } catch (SQLException e) {
 

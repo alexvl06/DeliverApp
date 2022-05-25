@@ -87,7 +87,7 @@ public class LegalModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "insert into Clients (address, phoneNumber, email, money) values (?, ?, ?, ?)";
+                String query = "insert into clients (address, phoneNumber, email, money) values (?, ?, ?, ?)";
                 ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, legal.getAddress());
                 ps.setString(2, legal.getPhoneNumber());
@@ -98,7 +98,7 @@ public class LegalModel {
                     ResultSet generatedKeys = ps.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         int idClient = generatedKeys.getInt(1);
-                        query = "insert into Legals (NIT, `business name`, idClient) values (?, ?, ?)";
+                        query = "insert into legals (NIT, `business name`, idClient) values (?, ?, ?)";
                         ps = conexion.prepareStatement(query);
                         ps.setString(1, legal.getNIT());
                         ps.setString(2, legal.getBusinessName());
@@ -124,7 +124,7 @@ public class LegalModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "update Clients set address = ?, phoneNumber = ?, email = ?, money = ?  where idClient = ?";
+                String query = "update clients set address = ?, phoneNumber = ?, email = ?, money = ?  where idClient = ?";
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, legal.getAddress());
                 ps.setString(2, legal.getPhoneNumber());
@@ -132,7 +132,7 @@ public class LegalModel {
                 ps.setDouble(4, legal.getMoney());
                 ps.setInt(5, legal.getId());
                 ps.executeUpdate();
-                query = "update Legals set `business name` = ? where NIT = ?";
+                query = "update legals set `business name` = ? where NIT = ?";
                 ps = conexion.prepareStatement(query);
                 ps.setString(1, legal.getBusinessName());
                 ps.setString(2, legal.getNIT());

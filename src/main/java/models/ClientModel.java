@@ -20,10 +20,10 @@ public class ClientModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "update Clients set money = ?  where idClient = ?";
+                String query = "update clients set money = ?  where idClient = ?";
                 ps = conexion.prepareStatement(query);
-                ps.setDouble(4, money);
-                ps.setInt(5, idClient);
+                ps.setDouble(1, money);
+                ps.setInt(2, idClient);
                 ps.executeUpdate();
                 System.out.println("¡Client money was updated successfully!");
             } catch (SQLException e) {

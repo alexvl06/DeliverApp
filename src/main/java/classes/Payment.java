@@ -16,7 +16,15 @@ public class Payment {
     private final String id;
     private final Date creationDate;
     private final int userId;
-    private final Double value;
+    private Double value;
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
 
 
 

@@ -471,7 +471,7 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(addProduct)
@@ -479,7 +479,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(updateProduct)
                 .addGap(18, 18, 18)
                 .addComponent(deleteProduct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -696,8 +696,8 @@ public class Main extends javax.swing.JFrame {
         this.CC.setEnabled(true);
         Color color = new Color(0, 0, 0);
         this.CCLabel.setForeground(color);
-        Main.clientList.removeAll();
-        Main.clientList.revalidate();
+        this.clientList.removeAll();
+        this.clientList.revalidate();
 
         if (this.TypeClient.getSelectedItem() == "Jurídico") {
             this.address.getText();
@@ -711,7 +711,7 @@ public class Main extends javax.swing.JFrame {
             color = new Color(242, 242, 242);
             this.CCLabel.setForeground(color);
             this.SecondLastName.setText("");
-            Main.clientList.setModel(Controller.createClientJlistModel("Jurídico"));
+            this.clientList.setModel(controller.createClientJlistModel("Jurídico"));
 
         } else {
             this.CC.setEnabled(true);
@@ -719,7 +719,7 @@ public class Main extends javax.swing.JFrame {
             this.Second_id.setText("Apellidos");
             this.SecondFirstname.setEnabled(true);
             this.SecondLastName.setEnabled(true);
-            Main.clientList.setModel(Controller.createClientJlistModel("Natural"));
+            this.clientList.setModel(controller.createClientJlistModel("Natural"));
 
         }
         this.productList.setModel(controller.createProductJlistModel());
@@ -769,12 +769,13 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         Controller controller = new Controller();
-        int i = Main.clientList.getSelectedIndex();
+        int i = this.clientList.getSelectedIndex();
         String clientName = "";
         if (i == -1) {
             JOptionPane.showMessageDialog(null, "No hay elemento seleccionado");
         } else {
-            String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+
+            String[] rowClientList = this.clientList.getSelectedValue().split("\\.");
             clientName += rowClientList[1];
             if (rowClientList.length > 2) {
                 for (int j = 2; j < rowClientList.length; j++) {
@@ -782,6 +783,10 @@ public class Main extends javax.swing.JFrame {
                 }
             }
             this.idClient = Integer.parseInt(rowClientList[0]);
+            DefaultTableModel tableModel = controller.createTableModelOfRequestData(idClient);
+            DefaultListModel listModel = controller.createRequestModel(idClient);
+            this.Table.setModel(tableModel);
+            this.requestList.setModel(listModel);
             this.SelectedClient.setText(clientName);
             this.SelectedToPay.setText(clientName);
             if (this.TypeClient.getSelectedItem() == "Jurídico") {
@@ -815,8 +820,8 @@ public class Main extends javax.swing.JFrame {
     private void DeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteClientActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        int i = Main.clientList.getSelectedIndex();
-        String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+        int i = this.clientList.getSelectedIndex();
+        String[] rowClientList = this.clientList.getSelectedValue().split("\\.");
         this.idClient = Integer.parseInt(rowClientList[0]);
         if (i == -1) {
             JOptionPane.showMessageDialog(rootPane, "No has seleccionado algún cliente.");
@@ -836,7 +841,7 @@ public class Main extends javax.swing.JFrame {
     private void UpdateClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateClientActionPerformed
         // TODO add your handling code here:
         Controller controller = new Controller();
-        String[] rowClientList = Main.clientList.getSelectedValue().split("\\.");
+        String[] rowClientList = this.clientList.getSelectedValue().split("\\.");
         this.idClient = Integer.parseInt(rowClientList[0]);
 
         String adr = this.address.getText();
@@ -1020,7 +1025,7 @@ public class Main extends javax.swing.JFrame {
             if (cltMoney - totalToPay < 0) {
                 JOptionPane.showMessageDialog(rootPane, "No cuenta con suficiente dinero para efectuar el pago.");
             } else {
-
+                JOptionPane.showMessageDialog(rootPane, "Su compra fue: \n\n\t" + controller.getBill(idClient));
                 controller.updateMoney(idClient, cltMoney - totalToPay);
                 this.clientMoney.setText(Double.toString(cltMoney - totalToPay) + "$ pesos");
                 DefaultTableModel model = controller.createTableModelOfRequestData(idClient);
@@ -1030,7 +1035,9 @@ public class Main extends javax.swing.JFrame {
                 this.requestList.setModel(listModel);
                 controller.updateProductList(idClient);
                 this.productList.setModel(controller.createProductJlistModel());
-                JOptionPane.showMessageDialog(rootPane, "Su compra fue: \n\n" + controller.getBill(idClient));
+                Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
+                model = new DefaultTableModel(columnas, 0);
+                this.Table.setModel(model);
             }
         }
 
@@ -1082,10 +1089,8 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        Controller.startTemporalDB();
-        DefaultListModel model = Controller.createClientJlistModel("Natural");
-        Main.clientList = new JList<>();
-        Main.clientList.setModel(model);
+
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -1118,7 +1123,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField address;
     private javax.swing.JTextField brand;
     private javax.swing.JButton buyingBtn;
-    private static javax.swing.JList<String> clientList;
+    private javax.swing.JList<String> clientList;
     private javax.swing.JLabel clientMoney;
     private javax.swing.JButton deleteProduct;
     private javax.swing.JTextArea description;
@@ -1144,7 +1149,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
+    private static javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
