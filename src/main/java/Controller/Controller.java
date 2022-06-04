@@ -5,11 +5,16 @@
 package Controller;
 
 import classes.*;
+import java.awt.PopupMenu;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import models.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -23,8 +28,7 @@ public class Controller {
     public ArrayList<Request> requestList = new ArrayList<>();
     public boolean listAccepted;
 
-
-    public  DefaultListModel createClientJlistModel(String type) {
+    public DefaultListModel createClientJlistModel(String type) {
         this.naturalList = NaturalModel.getNaturalList();
         DefaultListModel model = new DefaultListModel();
         String secondName, secondLastName;
@@ -155,27 +159,32 @@ public class Controller {
             for (int i = 0; i < productIds.size(); i++) {
                 Product product = ProductModel.getOneProduct(productIds.get(i));
                 for (int j = 0; j < this.requestList.size(); j++) {
-                    if (this.requestList.get(j).getProduct().getId() == productIds.get(i)) {
-                         this.listAccepted = false;
-                        if ((!decrementFlat && this.requestList.get(j).getQuantity().equals(product.getQuantity())) || (decrementFlat && this.requestList.get(j).getQuantity().equals(1))) {
-                           
-                            if (decrementFlat) {
-
-                                this.removeRequest(this.requestList.get(j).getId());
-
-                            }
-
+                    if ((this.requestList.get(j).getProduct().getId() == productIds.get(i))) {
+                        if ("Pagado".equals(this.requestList.get(j).getStatus())) {
+                            this.listAccepted = true;
                         } else {
-                            if (decrementFlat) {
-                                this.requestList.get(j).decreaseQuantity();
+
+                            this.listAccepted = false;
+                            if ((!decrementFlat && this.requestList.get(j).getQuantity().equals(product.getQuantity())) || (decrementFlat && this.requestList.get(j).getQuantity().equals(1))) {
+
+                                if (decrementFlat) {
+
+                                    this.removeRequest(this.requestList.get(j).getId());
+
+                                }
 
                             } else {
-                                this.requestList.get(j).increaseQuantity();
+                                if (decrementFlat) {
+                                    this.requestList.get(j).decreaseQuantity();
+
+                                } else {
+                                    this.requestList.get(j).increaseQuantity();
+
+                                }
+                                RequestModel.updateRequest(this.requestList.get(j));
+                                productIds.set(0, productIds.get(i));
 
                             }
-                            RequestModel.updateRequest(this.requestList.get(j));
-                            productIds.set(0,productIds.get(i));
-
                         }
 
                     }
@@ -192,14 +201,16 @@ public class Controller {
     }
 
     public DefaultListModel createRequestModel(int id) {
-        
+
         DefaultListModel model = new DefaultListModel();
 
         this.requestList = RequestModel.getRequestListByClientId(id);
         for (int i = 0; i < this.requestList.size(); i++) {
-            Product product = ProductModel.getOneProduct(this.requestList.get(i).getProduct().getId());
+            if ("Pendiente".equals(requestList.get(i).getStatus())) {
+                Product product = ProductModel.getOneProduct(this.requestList.get(i).getProduct().getId());
 
-            model.addElement(this.requestList.get(i).getId() + ". " + product.getDescription() + " " + product.getBrand() + " (" + this.requestList.get(i).getQuantity() + ")");
+                model.addElement(this.requestList.get(i).getId() + ". " + product.getDescription() + " " + product.getBrand() + " (" + this.requestList.get(i).getQuantity() + ")");
+            }
 
         }
         return model;
@@ -227,8 +238,11 @@ public class Controller {
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
         this.requestList = RequestModel.getRequestListByClientId(index);
         for (int j = 0; j < this.requestList.size(); j++) {
-            Product product = ProductModel.getOneProduct(this.requestList.get(j).getProduct().getId());
-            model.addRow(new Object[]{this.requestList.get(j).getId(), product.getBrand(), product.getDescription(), this.requestList.get(j).getQuantity(), product.getPrice(), product.getPrice() * this.requestList.get(j).getQuantity(), this.requestList.get(j).getCreationDate(), this.requestList.get(j).getStatus()});
+            if("Pendiente".equals(this.requestList.get(j).getStatus())){
+                Product product = ProductModel.getOneProduct(this.requestList.get(j).getProduct().getId());
+                model.addRow(new Object[]{this.requestList.get(j).getId(), product.getBrand(), product.getDescription(), this.requestList.get(j).getQuantity(), product.getPrice(), product.getPrice() * this.requestList.get(j).getQuantity(), this.requestList.get(j).getCreationDate(), this.requestList.get(j).getStatus()});
+            }
+            
         }
 
         return model;
@@ -288,6 +302,7 @@ public class Controller {
             int i = Integer.parseInt(flat);
             this.naturalList.get(i).setRequestList(this.requestList);
             Payment pay = this.naturalList.get(i).toPay(this.naturalList.get(i).getTotalValueToPay(), index);
+            
             NaturalModel.updateNatural(this.naturalList.get(i));
             return pay.getBill();
 
@@ -296,10 +311,18 @@ public class Controller {
             int i = Integer.parseInt(flat);
             this.legalList.get(i).setRequestList(this.requestList);
             Payment pay = this.legalList.get(i).toPay(this.legalList.get(i).getTotalValueToPay(), index);
-            System.out.println("Total value to pay: "+this.getTotalToPay(index));
+            this.changeStatusToPayed();
             LegalModel.updateLegal(this.legalList.get(i));
             return pay.getBill();
 
+        }
+
+    }
+
+    private void changeStatusToPayed() {
+        for (int i = 0; i < requestList.size(); i++) {
+            this.requestList.get(i).setStatus("Pagado");
+            RequestModel.updateRequest(requestList.get(i));
         }
 
     }
@@ -324,5 +347,34 @@ public class Controller {
         }
         return null;
     }
+
+    public ChartPanel createChartReport() {
+        ArrayList<MostWanted> mostWantedList = MostWantedReport.getMostWanted();
+        
+        DefaultPieDataset data = new DefaultPieDataset();
+        mostWantedList.forEach(element->{
+            data.setValue(element.getDescription(), element.getTotalQuantity());
+            System.out.println("Most wanted element from the array list: "+element.getDescription()+" And its quantity: "+element.getTotalQuantity());
+           
+        });
+        
+        System.out.println("Total items in dataset: "+data.getItemCount());
+        
+        JFreeChart chart  = ChartFactory.createPieChart(
+                "Top 3",
+                data,
+                true,
+                true,
+                false
+        );
+        
+        return new ChartPanel(chart);
+    }
+    
+    public void MostWantedFileCreation(){
+        ArrayList<MostWanted> mostWanted = MostWantedReport.getMostWanted();
+        MostWantedReport.exportReportToExcelFile(mostWanted);
+    }
+    
 
 }

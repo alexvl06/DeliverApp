@@ -92,7 +92,10 @@ public class Client {
         public Double getTotalValueToPay() {
         Double debt = 0.0;
         for (int i = 0; i < this.requestList.size(); i++) {
-            debt = debt + (this.requestList.get(i).getProduct().getPrice()*this.requestList.get(i).getQuantity());
+            if("Pendiente".equals(requestList.get(i).getStatus())){
+                debt += (this.requestList.get(i).getProduct().getPrice()*this.requestList.get(i).getQuantity());
+            }
+            
         }
         return debt;
     }

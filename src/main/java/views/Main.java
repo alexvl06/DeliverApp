@@ -6,15 +6,17 @@ package views;
 
 import Controller.Controller;
 import classes.*;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartPanel;
 
 /**
  *
@@ -31,6 +33,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         index = new HashMap<>();
+        this.refreshChartReport();
     }
 
     /**
@@ -109,6 +112,8 @@ public class Main extends javax.swing.JFrame {
         jComboBox2 = new javax.swing.JComboBox<>();
         payButton = new javax.swing.JButton();
         rebootCart = new javax.swing.JButton();
+        JChartPanel = new javax.swing.JPanel();
+        ExportFileButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -661,6 +666,34 @@ public class Main extends javax.swing.JFrame {
 
         Clientes.addTab("Pedidos", jPanel3);
 
+        JChartPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        ExportFileButton.setText("Exportar a Excel");
+        ExportFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportFileButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout JChartPanelLayout = new javax.swing.GroupLayout(JChartPanel);
+        JChartPanel.setLayout(JChartPanelLayout);
+        JChartPanelLayout.setHorizontalGroup(
+            JChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JChartPanelLayout.createSequentialGroup()
+                .addGap(220, 220, 220)
+                .addComponent(ExportFileButton)
+                .addContainerGap(235, Short.MAX_VALUE))
+        );
+        JChartPanelLayout.setVerticalGroup(
+            JChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JChartPanelLayout.createSequentialGroup()
+                .addContainerGap(268, Short.MAX_VALUE)
+                .addComponent(ExportFileButton)
+                .addGap(27, 27, 27))
+        );
+
+        Clientes.addTab("Los más vendidos", JChartPanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -765,10 +798,20 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CreateClientActionPerformed
 
+    private void refreshChartReport() {
+        Controller controller = new Controller();
+        ChartPanel panel = controller.createChartReport();
+        panel.setMouseWheelEnabled(true);
+       
+        JChartPanel.setLayout(new java.awt.BorderLayout());
+        JChartPanel.add(panel, BorderLayout.CENTER);
+        JChartPanel.validate();
+    }
     private void LoadClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadClientActionPerformed
         // TODO add your handling code here:
 
         Controller controller = new Controller();
+
         int i = this.clientList.getSelectedIndex();
         String clientName = "";
         if (i == -1) {
@@ -1030,14 +1073,8 @@ public class Main extends javax.swing.JFrame {
                 this.clientMoney.setText(Double.toString(cltMoney - totalToPay) + "$ pesos");
                 DefaultTableModel model = controller.createTableModelOfRequestData(idClient);
                 this.Table.setModel(model);
-                controller.resetRequestList(idClient);
-                DefaultListModel listModel = new DefaultListModel();
-                this.requestList.setModel(listModel);
                 controller.updateProductList(idClient);
                 this.productList.setModel(controller.createProductJlistModel());
-                Object columnas[] = {"ID", "Marca", "Detalle", "Cantidad", "Valor", "Total", "Fecha", "Estado"};
-                model = new DefaultTableModel(columnas, 0);
-                this.Table.setModel(model);
             }
         }
 
@@ -1062,6 +1099,13 @@ public class Main extends javax.swing.JFrame {
     private void CCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CCActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CCActionPerformed
+
+    private void ExportFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportFileButtonActionPerformed
+        // TODO add your handling code here:
+        Controller controller = new Controller();
+        controller.MostWantedFileCreation();
+        JOptionPane.showMessageDialog(null, "Los datos de la gráfica acaban de ser exportados a un archivo de excel. Lo puedes encontrar en la carpeta de ejecución de este programa bajo el nombre MostWantedReport.xls");
+    }//GEN-LAST:event_ExportFileButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1105,8 +1149,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTabbedPane Clientes;
     private javax.swing.JButton CreateClient;
     private javax.swing.JButton DeleteClient;
+    private javax.swing.JButton ExportFileButton;
     private javax.swing.JTextField FirstLastNameInput;
     private javax.swing.JTextField FirstNameInput;
+    private javax.swing.JPanel JChartPanel;
     private javax.swing.JButton LoadClient;
     private javax.swing.JButton LoadProduct;
     private javax.swing.JLabel Name;

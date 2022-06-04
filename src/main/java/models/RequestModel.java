@@ -85,7 +85,7 @@ public class RequestModel {
         try ( Connection conexion = db_connect.get_connection()) {
             PreparedStatement ps;
             try {
-                String query = "delete from requests where idClient = ?";
+                String query = "delete from requests where idClient = ? and status = 'Pendiente'";
                 ps = conexion.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();
